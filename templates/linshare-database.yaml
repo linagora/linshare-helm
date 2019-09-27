@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ include "linshare.fullname" . }}
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  serviceName: "{{ include "linshare.fullname" . }}-database"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: linshare-database
+        app.kubernetes.io/name: {{ include "linshare.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: database
+          image: docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.1
+          env:
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+            - name: POSTGRES_USER
+              value: "linshare"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass
+                  key: postgres-password
+          ports:
+            - containerPort: 5432
+	  {{- if .Values.database.resources }}
+          resources:
+            {{- toYaml .Values.database.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data/
+              name: pg-data
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "{{- .Values.database.storage.class }}"
+        name: pg-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "{{- .Values.database.storage.size }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-database
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 5432
+  selector:
+    app: linshare-database
+    app.kubernetes.io/name: {{ include "linshare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
