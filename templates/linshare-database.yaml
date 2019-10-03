@@ -22,16 +22,14 @@ spec:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
             - name: POSTGRES_USER
-              value: "linshare"
-            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: db-user-pass
+                  name: "{{ include "linshare.fullname" . }}-database"
                   key: postgres-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-user-pass
+                  name: "{{ include "linshare.fullname" . }}-database"
                   key: postgres-password
           ports:
             - containerPort: 5432
@@ -75,3 +73,14 @@ spec:
     app: linshare-database
     app.kubernetes.io/name: {{ include "linshare.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: {{ include "linshare.fullname" . }}-database
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+data:
+  postgres-password: "{{ randAlphaNum 12 | b64enc }}"
+  postgres-user: "{{ "linshare" | b64enc }}"

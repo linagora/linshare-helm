@@ -51,16 +51,17 @@ affinity: {}
 
 
 database:  
+  storage:
+    size: 1Gi
+    class: cinder
+  secretName: db-user-pass
   resources: {}
   # limits:
-  #   cpu: "701m"
+  #   cpu: "700m"
   #   memory: "2Gi"
   # requests:
   #   cpu: "500m"
   #   memory: "1Gi"
-  storage:
-    size: 1Gi
-    class: cinder
 
 
 uiUser:  
