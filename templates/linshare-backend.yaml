@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ include "linshare.fullname" . }}-backend
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  serviceName: "{{ include "linshare.fullname" . }}-backend"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: linshare-backend
+        app.kubernetes.io/name: {{ include "linshare.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: backend
+          image: docker-registry.linagora.com:5000/linshare-releases/linshare-backend:2.3.0
+          readinessProbe:
+            httpGet:
+              path: /linshare/
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /linshare/
+              port: 8080
+            initialDelaySeconds: 91
+            periodSeconds: 30
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "{{- .Values.backend.profiles }}"
+            - name: SSO_IP_LIST_ENABLE
+              value: "{{- .Values.backend.ssoIpFilter }}"
+            - name: CLAMAV_HOST
+              value: "1"
+            - name: CLAMAV_PORT
+              value: "3310"
+            - name: MONGODB_URI
+              value: "mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/linshare"
+            - name: MONGODB_URI_SMALLFILES
+              value: "mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/linshare-file"
+            - name: POSTGRES_HOST
+              value: "{{ include "linshare.fullname" . }}-database"
+            - name: POSTGRES_PORT
+              value: "5432"
+	    {{- if .Values.backend.thumbnail }}
+            - name: THUMBNAIL_ENABLE
+              value: "true"
+            - name: THUMBNAIL_HOST
+              value: "{{- .Values.backend.thumbnail -}}"
+            {{- end }}
+            - name: SMTP_HOST
+              value: "james"
+            - name: SMTP_PORT
+              value: "25"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "linshare.database.secretName" . }}"
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "linshare.database.secretName" . }}"
+                  key: postgres-password
+            - name: START_DEBUG
+              value: "0"
+          ports:
+            - containerPort: 8080
+	  {{- if .Values.database.resources }}
+          resources:
+            {{- toYaml .Values.database.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: storage-filesystem
+              mountPath: /var/lib/linshare/filesystemstorage
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "{{- .Values.backend.storage.class }}"
+        name: storage-filesystem
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: "{{- .Values.backend.storage.size }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-backend
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+  selector:
+    app: linshare-backend
+    app.kubernetes.io/name: {{ include "linshare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

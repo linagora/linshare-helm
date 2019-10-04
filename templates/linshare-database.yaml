@@ -2,7 +2,7 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: {{ include "linshare.fullname" . }}
+  name: "{{ include "linshare.fullname" . }}-database"
   labels:
 {{ include "linshare.labels" . | indent 4 }}
 spec:

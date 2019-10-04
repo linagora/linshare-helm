@@ -65,6 +65,23 @@ database:
   #   memory: "1Gi"
 
 
+backend:
+  storage:
+    size: 20Gi
+    class: cinder
+  ssoIpFilter: false
+  profiles: sso,jcloud,mongo,batches
+  thumbnail: linshare-thumbnail-server
+  # If you want  to override default generated secret name.
+  resources: {}
+  # limits:
+  #   cpu: "2"
+  #   memory: "2Gi"
+  # requests:
+  #   cpu: "1"
+  #   memory: "1Gi"
+
+
 uiUser:  
   resources: {}
 
