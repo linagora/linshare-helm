@@ -24,12 +24,12 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: "{{ include "linshare.fullname" . }}-database"
+                  name: "{{ include "linshare.database.secretName" . }}"
                   key: postgres-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ include "linshare.fullname" . }}-database"
+                  name: "{{ include "linshare.database.secretName" . }}"
                   key: postgres-password
           ports:
             - containerPort: 5432

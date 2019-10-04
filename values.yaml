@@ -54,7 +54,8 @@ database:
   storage:
     size: 1Gi
     class: cinder
-  secretName: db-user-pass
+  # If you want  to override default generated secret name.
+  secretName: null
   resources: {}
   # limits:
   #   cpu: "700m"
