@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ include "linshare.fullname" . }}-ui-admin"
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: linshare-ui-admin
+        app.kubernetes.io/name: {{ include "linshare.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: ui-admin
+          image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:3.3.0
+          env:
+            {{- if .Values.backend.externalUrl }}
+            - name: EXTERNAL_URL
+              value: "{{- .Values.backend.externalUrl -}}"
+          {{- end }}
+            - name: TOMCAT_PORT
+              value: '8080'
+            - name: TOMCAT_URL
+              value: {{ include "linshare.fullname" . }}-backend
+          ports:
+            - containerPort: 80
+	  {{- if .Values.database.resources }}
+          resources:
+            {{- toYaml .Values.database.resources | nindent 12 }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 30
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-ui-admin
+  labels:
+    svc: ui-admin
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  ports:
+    - name: '80'
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: linshare-ui-admin
+    app.kubernetes.io/name: {{ include "linshare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

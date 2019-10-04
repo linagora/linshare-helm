@@ -83,7 +83,12 @@ backend:
   #   memory: "1Gi"
 
 
-uiUser:  
+uiAdmin:
+  externalUrl: null
   resources: {}
-
-
+  # limits:
+  #   cpu: "500m"
+  #   memory: "500Mi"
+  # requests:
+  #   cpu: "500m"
+  #   memory: "500Mi"
