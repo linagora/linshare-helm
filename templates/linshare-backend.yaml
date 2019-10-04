@@ -54,7 +54,7 @@ spec:
               value: "{{- .Values.backend.thumbnail -}}"
             {{- end }}
             - name: SMTP_HOST
-              value: "james"
+              value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"
             - name: SMTP_PORT
               value: "25"
             - name: POSTGRES_USER
