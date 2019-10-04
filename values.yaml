@@ -50,7 +50,7 @@ tolerations: []
 affinity: {}
 
 
-database:  
+database:
   storage:
     size: 1Gi
     class: cinder
@@ -72,6 +72,7 @@ backend:
   ssoIpFilter: false
   profiles: sso,jcloud,mongo,batches
   thumbnail: linshare-thumbnail-server
+  # smtp: required smtp host
   # If you want  to override default generated secret name.
   resources: {}
   # limits:
