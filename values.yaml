@@ -1,6 +1,7 @@
 # Default values for linshare.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 
 replicaCount: 1
 
@@ -81,6 +82,8 @@ uiAdmin:
   #   memory: "500Mi"
 
 
+init:
+  noReply: no-reply@linshare.local
 
 uiUser:
   externalUrl: null
