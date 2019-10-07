@@ -2,7 +2,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ include "linshare.fullname" . }}-ui-admin"
+  name: "{{ include "linshare.fullname" . }}-ui-user"
   labels:
 {{ include "linshare.labels" . | indent 4 }}
 spec:
@@ -15,17 +15,17 @@ spec:
   template:
     metadata:
       labels:
-        app: linshare-ui-admin
+        app: linshare-ui-user
         app.kubernetes.io/name: {{ include "linshare.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
-        - name: ui-admin
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:3.3.0
+        - name: ui-user
+          image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:2.3.0
           env:
-          {{- if .Values.uiAdmin.externalUrl }}
+          {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
-              value: "{{- .Values.uiAdmin.externalUrl -}}"
+              value: "{{- .Values.uiUser.externalUrl -}}"
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'
@@ -33,9 +33,9 @@ spec:
               value: {{ include "linshare.fullname" . }}-backend
           ports:
             - containerPort: 80
-	  {{- if .Values.uiAdmin.resources }}
+          {{- if .Values.uiUser.resources }}
           resources:
-            {{- toYaml .Values.uiAdmin.resources | nindent 12 }}
+            {{- toYaml .Values.uiUser.resources | nindent 12 }}
           {{- end }}
           readinessProbe:
             httpGet:
@@ -59,7 +59,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "linshare.fullname" . }}-ui-admin
+  name: {{ include "linshare.fullname" . }}-ui-user
   labels:
     svc: ui-admin
 {{ include "linshare.labels" . | indent 4 }}
@@ -70,6 +70,6 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: linshare-ui-admin
+    app: linshare-ui-user
     app.kubernetes.io/name: {{ include "linshare.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

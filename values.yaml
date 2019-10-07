@@ -20,28 +20,14 @@ service:
 ingress:
   enabled: false
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+    # kubernetes.io/ingress.class: "traefik"
   hosts:
-    - host: chart-example.local
-      paths: []
-
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-  # resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+    - host: linshare-admin.local
+      path: '/'
+      suffix: ui-admin
+    - host: linshare-user.local
+      paths: '/'
+      suffix: ui-user
 
 nodeSelector: {}
 
@@ -70,7 +56,8 @@ backend:
     size: 20Gi
     class: cinder
   ssoIpFilter: false
-  profiles: sso,jcloud,mongo,batches
+  profiles: default,jcloud,mongo,batches
+  # profiles: sso,jcloud,mongo,batches
   thumbnail: linshare-thumbnail-server
   # smtp: required smtp host
   # If you want  to override default generated secret name.
@@ -84,6 +71,18 @@ backend:
 
 
 uiAdmin:
+  externalUrl: null
+  resources: {}
+  # limits:
+  #   cpu: "500m"
+  #   memory: "500Mi"
+  # requests:
+  #   cpu: "500m"
+  #   memory: "500Mi"
+
+
+
+uiUser:
   externalUrl: null
   resources: {}
   # limits:
