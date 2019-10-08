@@ -1,0 +1,68 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ include "linshare.fullname" . }}-mongodb"
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  serviceName: "{{ include "linshare.fullname" . }}-mongodb"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: linshare-mongodb
+        app.kubernetes.io/name: {{ include "linshare.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo:3.2.0
+          command:
+            - mongod
+            - "--smallfiles"
+            - "--noprealloc"
+          ports:
+            - containerPort: 27017
+          {{- if .Values.mongodb.resources }}
+          resources:
+            {{- toYaml .Values.mongodb.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: mongodb-persistent-storage
+              mountPath: /data/db
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "{{- .Values.mongodb.storage.class }}"
+        name: mongodb-persistent-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "{{- .Values.mongodb.storage.size }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-mongodb
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 27017
+  selector:
+    app: linshare-mongodb
+    app.kubernetes.io/name: {{ include "linshare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

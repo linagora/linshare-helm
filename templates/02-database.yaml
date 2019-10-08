@@ -1,3 +1,4 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -33,7 +34,7 @@ spec:
                   key: postgres-password
           ports:
             - containerPort: 5432
-	  {{- if .Values.database.resources }}
+          {{- if .Values.database.resources }}
           resources:
             {{- toYaml .Values.database.resources | nindent 12 }}
           {{- end }}

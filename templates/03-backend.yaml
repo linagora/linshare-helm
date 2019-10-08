@@ -1,3 +1,4 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -40,14 +41,14 @@ spec:
             - name: CLAMAV_PORT
               value: "3310"
             - name: MONGODB_URI
-              value: "mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/linshare"
+              value: "mongodb://{{ include "linshare.fullname" . }}-mongodb:27017/linshare"
             - name: MONGODB_URI_SMALLFILES
-              value: "mongodb://mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/linshare-file"
+              value: "mongodb://{{ include "linshare.fullname" . }}-mongodb:27017/linshare-files"
             - name: POSTGRES_HOST
               value: "{{ include "linshare.fullname" . }}-database"
             - name: POSTGRES_PORT
               value: "5432"
-	    {{- if .Values.backend.thumbnail }}
+	          {{- if .Values.backend.thumbnail }}
             - name: THUMBNAIL_ENABLE
               value: "true"
             - name: THUMBNAIL_HOST

@@ -37,6 +37,18 @@ tolerations: []
 affinity: {}
 
 
+mongodb:
+  storage:
+    size: 2Gi
+    class: cinder
+  resources: {}
+  # limits:
+  #   cpu: "700m"
+  #   memory: "2Gi"
+  # requests:
+  #   cpu: "500m"
+  #   memory: "1Gi"
+
 database:
   storage:
     size: 1Gi
