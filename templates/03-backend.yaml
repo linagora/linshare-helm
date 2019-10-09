@@ -52,7 +52,7 @@ spec:
             - name: THUMBNAIL_ENABLE
               value: "true"
             - name: THUMBNAIL_HOST
-              value: "{{- .Values.backend.thumbnail -}}"
+              value: "{{ include "linshare.fullname" . }}-thumbnail-server"
             {{- end }}
             - name: SMTP_HOST
               value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"

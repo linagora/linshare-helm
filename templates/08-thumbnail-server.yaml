@@ -1,0 +1,72 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "linshare.fullname" . }}-thumbnail-server
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: linshare-thumbnail-server
+        app.kubernetes.io/name: {{ include "linshare.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: thumbnail-server
+          image: docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.0.3
+          {{- if .Values.uiUser.resources }}
+          resources:
+            {{- toYaml .Values.uiUser.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 30
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-thumbnail-server
+  labels:
+    svc: ui-admin
+{{ include "linshare.labels" . | indent 4 }}
+spec:
+  ports:
+    - name: '8080'
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: '8081'
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+  selector:
+    app: linshare-thumbnail-server
+    app.kubernetes.io/name: {{ include "linshare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

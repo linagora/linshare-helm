@@ -71,7 +71,7 @@ backend:
   ssoIpFilter: false
   profiles: default,jcloud,mongo,batches
   # profiles: sso,jcloud,mongo,batches
-  thumbnail: linshare-thumbnail-server
+  thumbnail: true
   # smtp: required smtp host
   # If you want  to override default generated secret name.
   resources: {}
