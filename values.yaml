@@ -12,7 +12,9 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
+# override release name
 nameOverride: ""
+# override global object prefixes.
 fullnameOverride: ""
 
 service:
