@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: database
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.1
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
+          imagePullPolicy: {{ .Values.database.image.pullPolicy }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"

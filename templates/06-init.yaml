@@ -18,7 +18,8 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.1
+          image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
+          imagePullPolicy: {{ .Values.init.image.pullPolicy }}
           env:
             - name: LS_DEBUG
               value: "0"

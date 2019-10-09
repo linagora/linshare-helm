@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-backend:2.3.0
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           readinessProbe:
             httpGet:
               path: /linshare/

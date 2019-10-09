@@ -19,7 +19,8 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: mongo:3.2.0
+          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
           command:
             - mongod
             - "--smallfiles"
@@ -58,7 +59,6 @@ metadata:
   labels:
 {{ include "linshare.labels" . | indent 4 }}
 spec:
-  clusterIP: None
   ports:
     - protocol: TCP
       port: 27017

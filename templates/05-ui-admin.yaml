@@ -22,7 +22,8 @@ spec:
     spec:
       containers:
         - name: ui-admin
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:3.3.0
+          image: "{{ .Values.uiAdmin.image.repository }}:{{ .Values.uiAdmin.image.tag }}"
+          imagePullPolicy: {{ .Values.uiAdmin.image.pullPolicy }}
           env:
           {{- if .Values.uiAdmin.externalUrl }}
             - name: EXTERNAL_URL

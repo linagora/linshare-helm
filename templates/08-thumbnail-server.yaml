@@ -22,10 +22,11 @@ spec:
     spec:
       containers:
         - name: thumbnail-server
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.0.3
-          {{- if .Values.uiUser.resources }}
+          image: "{{ .Values.thumbnail.image.repository }}:{{ .Values.thumbnail.image.tag }}"
+          imagePullPolicy: {{ .Values.thumbnail.image.pullPolicy }}
+          {{- if .Values.thumbnail.resources }}
           resources:
-            {{- toYaml .Values.uiUser.resources | nindent 12 }}
+            {{- toYaml .Values.thumbnail.resources | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: 8080

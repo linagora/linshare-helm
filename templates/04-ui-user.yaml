@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
         - name: ui-user
-          image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:2.3.0
+          image: "{{ .Values.uiUser.image.repository }}:{{ .Values.uiUser.image.tag }}"
+          imagePullPolicy: {{ .Values.uiUser.image.pullPolicy }}
           env:
           {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
