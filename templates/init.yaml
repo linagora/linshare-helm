@@ -63,10 +63,10 @@ spec:
               value: "pattern-demo"
             - name: LS_DOMAIN_PATTERN_MODEL
               value: "a4620dfc-dc46-11e8-a098-2355f9d6585a"
-#           - name: LS_JWT_PUB_KEY_NAME
-#             value: "linagora.esn.linshare"
-#           - name: LS_JWT_PUB_KEY
-#             value: "/linagora/data/public"
+            - name: LS_JWT_PUB_KEY_NAME
+              value: "{{- .Values.init.extraJwtKeyName -}}"
+            - name: LS_JWT_PUB_KEY
+              value: "/linagora/data/public"
            {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
