@@ -16,10 +16,18 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       restartPolicy: OnFailure
+      volumes:
+        - name: extra-jwt-key
+          secret:
+            secretName: extra-jwt-key
+            optional: true
       containers:
         - name: init
           image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
           imagePullPolicy: {{ .Values.init.image.pullPolicy }}
+          volumeMounts:
+            - name: extra-jwt-key
+              mountPath: /linagora/data/
           env:
             - name: LS_DEBUG
               value: "0"
@@ -33,9 +41,49 @@ spec:
            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
               value: "{{- .Values.init.noReply -}}"
+           {{- if .Values.demo.enabled }}
+            - name: LS_LDAP_NAME
+              value: "ldap-demo"
+            - name: LS_LDAP_URL
+              value: "ldap://{{ include "linshare.fullname" . }}-ldap:389"
+            - name: LS_LDAP_BASE_DN
+              value: "ou=People,dc=linshare,dc=org"
+            - name: LS_LDAP_DN
+              value: "cn=linshare,dc=linshare,dc=org"
+            - name: LS_LDAP_PW
+              value: "linshare"
+            - name: LS_DEFAULT_PASSWORD
+              value: "adminlinshare"
+            - name: LS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "linshare.fullname" . }}-root-account
+                  key: root-password
+            - name: LS_DOMAIN_PATTERN_NAME
+              value: "pattern-demo"
+            - name: LS_DOMAIN_PATTERN_MODEL
+              value: "a4620dfc-dc46-11e8-a098-2355f9d6585a"
+#           - name: LS_JWT_PUB_KEY_NAME
+#             value: "linagora.esn.linshare"
+#           - name: LS_JWT_PUB_KEY
+#             value: "/linagora/data/public"
+           {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- range .Values.imagePullSecrets }}
         - name: {{ . }}
       {{- end }}
     {{- end }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: {{ include "linshare.fullname" . }}-root-account
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+{{ include "linshare.labels" . | indent 4 }}
+data:
+  root-password: "{{ randAlphaNum 12 | b64enc }}"
+  root-user: "{{ "root@localhost.localdomain" | b64enc }}"

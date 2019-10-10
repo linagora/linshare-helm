@@ -115,6 +115,7 @@ uiAdmin:
 
 init:
   noReply: no-reply@linshare.local
+  extraJwtKeyName: extraJwtKeyName
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-init
     tag: 2.3.1
@@ -147,3 +148,21 @@ thumbnail:
   # requests:
   #   cpu: "500m"
   #   memory: "500Mi"
+
+
+demo:
+  enabled: false
+
+# if you enable the demo mode, you may want to also deploy the ldap service too.
+ldap:
+  image:
+    repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+  resources: {}
+  # limits:
+  #   cpu: "700m"
+  #   memory: "2Gi"
+  # requests:
+  #   cpu: "500m"
+  #   memory: "1Gi"
