@@ -83,6 +83,7 @@ metadata:
   annotations:
     "helm.sh/resource-policy": keep
   labels:
+    secret: linshare-root-account
 {{ include "linshare.labels" . | indent 4 }}
 data:
   root-password: "{{ randAlphaNum 12 | b64enc }}"
