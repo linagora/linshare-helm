@@ -43,7 +43,7 @@ affinity: {}
 mongodb:
   storage:
     size: 2Gi
-    class: cinder
+    class: cinder-classic
   image:
     repository: mongo
     tag: 3.2
@@ -59,7 +59,7 @@ mongodb:
 database:
   storage:
     size: 1Gi
-    class: cinder
+    class: cinder-classic
   # If you want  to override default generated secret name.
   secretName: null
   image:
@@ -78,7 +78,7 @@ database:
 backend:
   storage:
     size: 20Gi
-    class: cinder
+    class: cinder-classic
   ssoIpFilter: false
   profiles: default,jcloud,mongo,batches
   # profiles: sso,jcloud,mongo,batches
