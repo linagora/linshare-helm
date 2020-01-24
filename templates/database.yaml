@@ -1,20 +1,22 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "{{ include "linshare.fullname" . }}-database"
   labels:
-{{ include "linshare.labels" . | indent 4 }}
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   serviceName: "{{ include "linshare.fullname" . }}-database"
   replicas: 1
+  selector:
+    matchLabels:
+      {{- include "linshare.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
+        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-database
-        app.kubernetes.io/name: {{ include "linshare.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: database
@@ -65,16 +67,16 @@ kind: Service
 metadata:
   name: {{ include "linshare.fullname" . }}-database
   labels:
-{{ include "linshare.labels" . | indent 4 }}
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-database
 spec:
   clusterIP: None
   ports:
     - protocol: TCP
       port: 5432
   selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-database
-    app.kubernetes.io/name: {{ include "linshare.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
 ---
 apiVersion: v1
 kind: Secret

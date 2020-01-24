@@ -35,20 +35,24 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "linshare.labels" -}}
-app.kubernetes.io/name: {{ include "linshare.name" . }}
 helm.sh/chart: {{ include "linshare.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{ include "linshare.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
+{{/*
+Selector labels
+*/}}
+{{- define "linshare.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "linshare.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create the name of the service account to use
 */}}
 {{- define "linshare.database.secretName" -}}
 {{- if .Values.database.secretName -}}

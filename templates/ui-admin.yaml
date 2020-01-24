@@ -1,24 +1,21 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ include "linshare.fullname" . }}-ui-admin"
   labels:
-{{ include "linshare.labels" . | indent 4 }}
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
-  replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "linshare.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
+        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-ui-admin
-        app.kubernetes.io/name: {{ include "linshare.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: ui-admin
@@ -63,8 +60,8 @@ kind: Service
 metadata:
   name: {{ include "linshare.fullname" . }}-ui-admin
   labels:
-    svc: ui-admin
-{{ include "linshare.labels" . | indent 4 }}
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-ui-admin
 spec:
   ports:
     - name: '80'
@@ -72,6 +69,5 @@ spec:
       port: 80
       targetPort: 80
   selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-ui-admin
-    app.kubernetes.io/name: {{ include "linshare.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
