@@ -23,7 +23,26 @@ spec:
       - name: config
         configMap:
           name: "{{ include "linshare.fullname" . }}-mail"
+      - name: config-web
+        configMap:
+          name: "{{ include "linshare.fullname" . }}-webmail"
       containers:
+        - name: webmail
+          image: "{{ .Values.mail.frontend.image.repository }}:{{ .Values.mail.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.mail.frontend.image.pullPolicy }}
+          volumeMounts:
+            - name: config-web
+              mountPath: /var/www/config/config.inc.php
+              subPath: config.inc.php
+          env:
+            - name: ROUNDCUBE_DEFAULT_HOST
+              value: "localhost"
+            - name: ROUNDCUBE_SMTP_SERVER
+              value: "localhost"
+            - name: ROUNDCUBE_SMTP_PORT
+              value: "25"
+          ports:
+            - containerPort: 80
         - name: mail
           image: "{{ .Values.mail.backend.image.repository }}:{{ .Values.mail.backend.image.tag }}"
           imagePullPolicy: {{ .Values.mail.backend.image.pullPolicy }}
@@ -93,6 +112,10 @@ spec:
       protocol: TCP
       port: 25
       targetPort: 25
+    - name: '80'
+      protocol: TCP
+      port: 80
+      targetPort: 80
   selector:
     {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-mail

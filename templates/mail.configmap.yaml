@@ -1,4 +1,5 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.enabled -}}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -143,3 +144,31 @@ data:
     used by DKIM\nmilter_protocol = 6\nmilter_default_action = accept\ndkim_milter
     = inet:localhost:8891\ndmarc_milter = inet:localhost:8893\nsmtpd_milters = $dkim_milter,$dmarc_milter\nnon_smtpd_milters
     = $dkim_milter\n"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "linshare.fullname" . }}-webmail"
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+data:
+  config.inc.php: |
+    <?php
+
+    $config = array();
+
+    $config['db_dsnw'] = 'sqlite:////var/www/db/sqlite.db';
+
+    $config['imap_conn_options'] =
+    $config['managesieve_conn_options'] = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => false,
+        ],
+    ];
+
+
+    $config['plugins'] = array('carddav', 'managesieve');
+    if(getenv('ROUNDCUBE_USER_FILE')) $config['plugins'][] = 'password';
+{{- end }}
