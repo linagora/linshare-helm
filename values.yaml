@@ -166,3 +166,16 @@ ldap:
   # requests:
   #   cpu: "500m"
   #   memory: "1Gi"
+
+mail:
+  backend:
+    image:
+      repository: tvial/docker-mailserver
+      tag: 2.1
+      pullPolicy: IfNotPresent
+  frontend:
+    image:
+      repository: robbertkl/roundcube
+      tag: latest
+      pullPolicy: IfNotPresent
+  resources: {}

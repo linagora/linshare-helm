@@ -1,0 +1,145 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "linshare.fullname" . }}-mail"
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+data:
+  10-auth.conf: "##\n## Authentication processes\n##\n\n# Disable LOGIN command and
+    all other plaintext authentications unless\n# SSL/TLS is used (LOGINDISABLED capability).
+    Note that if the remote IP\n# matches the local IP (ie. you're connecting from
+    the same computer), the\n# connection is considered secure and plaintext authentication
+    is allowed.\n# See also ssl=required setting.\n# linagora: to enable plaintext
+    authentication\ndisable_plaintext_auth = no\n\n# Authentication cache size (e.g.
+    10M). 0 means it's disabled. Note that\n# bsdauth, PAM and vpopmail require cache_key
+    to be set for caching to be used.\n#auth_cache_size = 0\n# Time to live for cached
+    data. After TTL expires the cached record is no\n# longer used, *except* if the
+    main database lookup returns internal failure.\n# We also try to handle password
+    changes automatically: If user's previous\n# authentication was successful, but
+    this one wasn't, the cache isn't used.\n# For now this works only with plaintext
+    authentication.\n#auth_cache_ttl = 1 hour\n# TTL for negative hits (user not found,
+    password mismatch).\n# 0 disables caching them completely.\n#auth_cache_negative_ttl
+    = 1 hour\n\n# Space separated list of realms for SASL authentication mechanisms
+    that need\n# them. You can leave it empty if you don't want to support multiple
+    realms.\n# Many clients simply use the first one listed here, so keep the default
+    realm\n# first.\n#auth_realms =\n\n# Default realm/domain to use if none was specified.
+    This is used for both\n# SASL realms and appending @domain to username in plaintext
+    logins.\n#auth_default_realm = \n\n# List of allowed characters in username. If
+    the user-given username contains\n# a character not listed in here, the login
+    automatically fails. This is just\n# an extra check to make sure user can't exploit
+    any potential quote escaping\n# vulnerabilities with SQL/LDAP databases. If you
+    want to allow all characters,\n# set this value to empty.\n#auth_username_chars
+    = abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890.-_@\n\n# Username
+    character translations before it's looked up from databases. The\n# value contains
+    series of from -> to characters. For example \"#@/@\" means\n# that '#' and '/'
+    characters are translated to '@'.\n#auth_username_translation =\n\n# Username
+    formatting before it's looked up from databases. You can use\n# the standard variables
+    here, eg. %Lu would lowercase the username, %n would\n# drop away the domain if
+    it was given, or \"%n-AT-%d\" would change the '@' into\n# \"-AT-\". This translation
+    is done after auth_username_translation changes.\n#auth_username_format = %Lu\n\n#
+    If you want to allow master users to log in by specifying the master\n# username
+    within the normal username string (ie. not using SASL mechanism's\n# support for
+    it), you can specify the separator character here. The format\n# is then <username><separator><master
+    username>. UW-IMAP uses \"*\" as the\n# separator, so that could be a good choice.\n#auth_master_user_separator
+    =\n\n# Username to use for users logging in with ANONYMOUS SASL mechanism\n#auth_anonymous_username
+    = anonymous\n\n# Maximum number of dovecot-auth worker processes. They're used
+    to execute\n# blocking passdb and userdb queries (eg. MySQL and PAM). They're\n#
+    automatically created and destroyed as needed.\n#auth_worker_max_count = 30\n\n#
+    Host name to use in GSSAPI principal names. The default is to use the\n# name
+    returned by gethostname(). Use \"$ALL\" (with quotes) to allow all keytab\n# entries.\n#auth_gssapi_hostname
+    =\n\n# Kerberos keytab to use for the GSSAPI mechanism. Will use the system\n#
+    default (usually /etc/krb5.keytab) if not specified. You may need to change\n#
+    the auth service to run as root to be able to read this file.\n#auth_krb5_keytab
+    = \n\n# Do NTLM and GSS-SPNEGO authentication using Samba's winbind daemon and\n#
+    ntlm_auth helper. <doc/wiki/Authentication/Mechanisms/Winbind.txt>\n#auth_use_winbind
+    = no\n\n# Path for Samba's ntlm_auth helper binary.\n#auth_winbind_helper_path
+    = /usr/bin/ntlm_auth\n\n# Time to delay before replying to failed authentications.\n#auth_failure_delay
+    = 2 secs\n\n# Require a valid SSL client certificate or the authentication fails.\n#auth_ssl_require_client_cert
+    = no\n\n# Take the username from client's SSL certificate, using \n# X509_NAME_get_text_by_NID()
+    which returns the subject's DN's\n# CommonName. \n#auth_ssl_username_from_cert
+    = no\n\n# Space separated list of wanted authentication mechanisms:\n#   plain
+    login digest-md5 cram-md5 ntlm rpa apop anonymous gssapi otp skey\n#   gss-spnego\n#
+    NOTE: See also disable_plaintext_auth setting.\nauth_mechanisms = plain login\n\n##\n##
+    Password and user databases\n##\n\n#\n# Password database is used to verify user's
+    password (and nothing more).\n# You can have multiple passdbs and userdbs. This
+    is useful if you want to\n# allow both system users (/etc/passwd) and virtual
+    users to login without\n# duplicating the system users into virtual database.\n#\n#
+    <doc/wiki/PasswordDatabase.txt>\n#\n# User database specifies where mails are
+    located and what user/group IDs\n# own them. For single-UID configuration use
+    \"static\" userdb.\n#\n# <doc/wiki/UserDatabase.txt>\n\n#!include auth-deny.conf.ext\n#!include
+    auth-master.conf.ext\n\n#!include auth-system.conf.ext\n#!include auth-sql.conf.ext\n!include
+    auth-ldap.conf.ext\n#!include auth-passwdfile.inc\n#!include auth-checkpassword.conf.ext\n#!include
+    auth-vpopmail.conf.ext\n#!include auth-static.conf.ext\n"
+  10-ssl.conf: "##\n## SSL settings\n##\n\n# SSL/TLS support: yes, no, required. <doc/wiki/SSL.txt>\n#
+    linagora: I commented the ssl required in order to not have a secure connexion
+    between the client and devcot, errors occurred otherwise \n# ssl = required\n\n#
+    PEM encoded X.509 SSL/TLS certificate and private key. They're opened before\n#
+    dropping root privileges, so keep the key file unreadable by anyone but\n# root.
+    Included doc/mkcert.sh can be used to easily generate self-signed\n# certificate,
+    just make sure to update the domains in dovecot-openssl.cnf\nssl_cert = </etc/dovecot/dovecot.pem\nssl_key
+    = </etc/dovecot/private/dovecot.pem\n\n# If key file is password protected, give
+    the password here. Alternatively\n# give it when starting dovecot with -p parameter.
+    Since this file is often\n# world-readable, you may want to place this setting
+    instead to a different\n# root owned 0600 file by using ssl_key_password = <path.\n#ssl_key_password
+    =\n\n# PEM encoded trusted certificate authority. Set this only if you intend
+    to use\n# ssl_verify_client_cert=yes. The file should contain the CA certificate(s)\n#
+    followed by the matching CRL(s). (e.g. ssl_ca = </etc/ssl/certs/ca.pem)\n#ssl_ca
+    = \n\n# Require that CRL check succeeds for client certificates.\n#ssl_require_crl
+    = yes\n\n# Directory and/or file for trusted SSL CA certificates. These are used
+    only\n# when Dovecot needs to act as an SSL client (e.g. imapc backend). The\n#
+    directory is usually /etc/ssl/certs in Debian-based systems and the file is\n#
+    /etc/pki/tls/cert.pem in RedHat-based systems.\n#ssl_client_ca_dir =\n#ssl_client_ca_file
+    =\n\n# Request client to send a certificate. If you also want to require it, set\n#
+    auth_ssl_require_client_cert=yes in auth section.\n#ssl_verify_client_cert = no\n\n#
+    Which field from certificate to use for username. commonName and\n# x500UniqueIdentifier
+    are the usual choices. You'll also need to set\n# auth_ssl_username_from_cert=yes.\n#ssl_cert_username_field
+    = commonName\n\n# DH parameters length to use.\n#ssl_dh_parameters_length = 1024\n\n#
+    SSL protocols to use\nssl_protocols = !SSLv2 !SSLv3\n\n# SSL ciphers to use\nssl_cipher_list
+    = ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS\n\n#
+    Prefer the server's order of ciphers over client's.\nssl_prefer_server_ciphers
+    = yes\n\n# SSL crypto device to use, for valid values run \"openssl engine\"\n#ssl_crypto_device
+    =\n"
+  dovecot-ldap.conf.ext: |
+    base = ou=People,dc=linshare,dc=org
+    default_pass_scheme = SSHA
+    dn = cn=linshare,dc=linshare,dc=org
+    dnpass = linshare
+    hosts = {{ include "linshare.fullname" . }}-ldap
+    ldap_version        = 3
+    auth_bind = yes
+    pass_attrs          = uid=user,userPassword=password
+    pass_filter         = (&(objectClass=PostfixBookMailAccount)(uid=%n))
+    user_attrs          = mailHomeDirectory=home,mailUidNumber=uid,mailGidNumber=gid,mailStorageDirectory=mail
+    user_filter         = (&(objectClass=PostfixBookMailAccount)(uid=%n))
+  main.cf: "# See /usr/share/postfix/main.cf.dist for a commented, more complete version\n\nsmtpd_banner
+    = $myhostname ESMTP $mail_name (Ubuntu)\nbiff = no\nappend_dot_mydomain = no\nreadme_directory
+    = no\n\n# Basic configuration\n# myhostname = \nalias_maps = texthash:/etc/aliases\nalias_database
+    = texthash:/etc/aliases\nmydestination = \nrelayhost = \nmynetworks = 127.0.0.0/8
+    [::1]/128 [fe80::]/64 172.18.0.9/32\nmailbox_size_limit = 0\nrecipient_delimiter
+    = +\ninet_interfaces = all\ninet_protocols = all\n\n# TLS parameters\nsmtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem\nsmtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key\n#smtpd_tls_CAfile=\n#smtp_tls_CAfile=\nsmtpd_tls_security_level
+    = may\nsmtpd_use_tls=yes\nsmtp_tls_security_level = may\nsmtp_tls_loglevel = 1\ntls_ssl_options
+    = NO_COMPRESSION\ntls_high_cipherlist=ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS\nsmtpd_tls_protocols=!SSLv2,!SSLv3\nsmtp_tls_protocols=!SSLv2,!SSLv3\nsmtpd_tls_mandatory_ciphers
+    = high\nsmtpd_tls_mandatory_protocols = !SSLv2,!SSLv3\nsmtpd_tls_exclude_ciphers
+    = aNULL, LOW, EXP, MEDIUM, ADH, AECDH, MD5, DSS, ECDSA, CAMELLIA128, 3DES, CAMELLIA256,
+    RSA+AES, eNULL\nsmtpd_tls_CApath = /etc/ssl/certs\nsmtp_tls_CApath = /etc/ssl/certs\n\n#
+    linagora: I remove the reject non FQDN from the smtpd recipient restrictions\n#
+    Settings to prevent SPAM early\nsmtpd_helo_required = yes\nsmtpd_delay_reject
+    = yes\nsmtpd_helo_restrictions = permit_mynetworks, permit\nsmtpd_relay_restrictions
+    = permit_mynetworks permit_sasl_authenticated defer_unauth_destination\nsmtpd_recipient_restrictions
+    = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination,\n    reject_unauth_pipelining,
+    reject_unknown_recipient_domain,\n    reject_rbl_client zen.spamhaus.org, reject_rbl_client
+    bl.spamcop.net\nsmtpd_client_restrictions = permit_mynetworks, permit_sasl_authenticated,
+    reject_unauth_destination, reject_unauth_pipelining\n#smtpd_sender_restrictions
+    = permit_sasl_authenticated, permit_mynetworks, reject_unknown_sender_domain\nsmtpd_sender_restrictions
+    = permit_sasl_authenticated, permit_mynetworks\n\n# SASL\nsmtpd_sasl_auth_enable
+    = yes\nsmtpd_sasl_path = /var/spool/postfix/private/auth\nsmtpd_sasl_type = dovecot\n\nsmtpd_sasl_security_options
+    = noanonymous\nsmtpd_sasl_local_domain = $myhostname\nbroken_sasl_auth_clients
+    = yes\n\n# Mail directory\nvirtual_transport = lmtp:unix:/var/run/dovecot/lmtp\nvirtual_mailbox_domains
+    = /etc/postfix/vhost\nvirtual_mailbox_maps = ldap:/etc/postfix/ldap-users.cf\nvirtual_alias_maps
+    = ldap:/etc/postfix/ldap-aliases.cf, ldap:/etc/postfix/ldap-groups.cf\n\n# Additional
+    option for filtering\ncontent_filter = smtp-amavis:[127.0.0.1]:10024\n\n# Milters
+    used by DKIM\nmilter_protocol = 6\nmilter_default_action = accept\ndkim_milter
+    = inet:localhost:8891\ndmarc_milter = inet:localhost:8893\nsmtpd_milters = $dkim_milter,$dmarc_milter\nnon_smtpd_milters
+    = $dkim_milter\n"

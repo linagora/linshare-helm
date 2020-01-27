@@ -1,0 +1,99 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.enabled -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "linshare.fullname" . }}-mail"
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-mail
+  template:
+    metadata:
+      labels:
+        {{- include "linshare.selectorLabels" . | nindent 8 }}
+        app: linshare-mail
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: "{{ include "linshare.fullname" . }}-mail"
+      containers:
+        - name: mail
+          image: "{{ .Values.mail.backend.image.repository }}:{{ .Values.mail.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.mail.backend.image.pullPolicy }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/postfix/main.cf
+              subPath: main.cf
+            - name: config
+              mountPath: /etc/dovecot/conf.d/10-ssl.conf
+              subPath: 10-ssl.conf
+            - name: config
+              mountPath: /etc/dovecot/conf.d/10-auth.conf
+              subPath: 10-auth.conf
+            - name: config
+              mountPath: /etc/dovecot/dovecot-ldap.conf.ext
+              subPath: dovecot-ldap.conf.ext
+          env:
+            - name: ENABLE_SPAMASSASSIN
+              value: "0"
+            - name: ENABLE_CLAMAV
+              value: "0"
+            - name: ENABLE_FAIL2BAN
+              value: "0"
+            - name: ONE_DIR
+              value: "1"
+            - name: DMS_DEBUG
+              value: "0"
+            - name: ENABLE_LDAP
+              value: "1"
+            - name: OVERRIDE_HOSTNAME
+              value: "mail.linshare.org"
+            - name: HOSTNAME
+              value: "mail"
+            - name: DOMAINNAME
+              value: "linshare.org"
+            - name: LDAP_SERVER_HOST
+              value: "{{ include "linshare.fullname" . }}-ldap"
+            - name: LDAP_SEARCH_BASE
+              value: "ou=People,dc=linshare,dc=org"
+            - name: LDAP_BIND_DN
+              value: "cn=linshare,dc=linshare,dc=org"
+            - name: LDAP_BIND_PW
+              value: "linshare"
+          ports:
+            - containerPort: 25
+          {{- if .Values.uiUser.resources }}
+          resources:
+            {{- toYaml .Values.uiUser.resources | nindent 12 }}
+          {{- end }}
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-mail
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-mail
+spec:
+  ports:
+    - name: '25'
+      protocol: TCP
+      port: 25
+      targetPort: 25
+  selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+    app: linshare-mail
+{{- end }}

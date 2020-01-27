@@ -57,8 +57,13 @@ spec:
             - name: THUMBNAIL_HOST
               value: "{{ include "linshare.fullname" . }}-thumbnail-server"
             {{- end }}
+            {{- if .Values.demo.enabled }}
+            - name: SMTP_HOST
+              value: "{{ include "linshare.fullname" . }}-mail"
+            {{ else }}
             - name: SMTP_HOST
               value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"
+            {{- end }}
             - name: SMTP_PORT
               value: "25"
             - name: POSTGRES_USER
