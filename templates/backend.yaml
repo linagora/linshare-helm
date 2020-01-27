@@ -18,14 +18,6 @@ spec:
         {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-backend
     spec:
-      volumes:
-        - name: log4j-properties
-          configMap:
-            name: log4j-properties
-            optional: true
-            items:
-              - key: log4j.properties
-                path: log4j.properties
       containers:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
@@ -90,9 +82,6 @@ spec:
           volumeMounts:
             - name: storage-filesystem
               mountPath: /var/lib/linshare/filesystemstorage
-            - name: log4j-properties
-              mountPath: /etc/linshare/log4j.properties
-              subPath: log4j.properties
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- range .Values.imagePullSecrets }}
