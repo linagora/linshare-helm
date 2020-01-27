@@ -1,0 +1,54 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.enabled -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "linshare.fullname" . }}-ldap"
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "linshare.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "linshare.selectorLabels" . | nindent 8 }}
+        app: linshare-ldap
+    spec:
+      containers:
+        - name: ldap
+          image: "{{ .Values.ldap.image.repository }}:{{ .Values.ldap.image.tag }}"
+          imagePullPolicy: {{ .Values.ldap.image.pullPolicy }}
+          ports:
+            - containerPort: 389
+	        {{- if .Values.ldap.resources }}
+          resources:
+            {{- toYaml .Values.ldap.resources | nindent 12 }}
+          {{- end }}
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-ldap
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-ldap
+spec:
+  ports:
+    - name: '389'
+      protocol: TCP
+      port: 389
+      targetPort: 389
+  selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+    app: linshare-ldap
+{{- end }}

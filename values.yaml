@@ -157,7 +157,7 @@ demo:
 ldap:
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests
-    tag: "1.0"
+    tag: "1.0.1"
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
