@@ -38,6 +38,8 @@ spec:
            {{- if .Values.uiUser.externalUrl }}
             - name: LS_USER_URL
               value: "{{- .Values.uiUser.externalUrl -}}"
+            - name: LS_EXTERNAL_URL
+              value: "{{- .Values.uiUser.externalUrl -}}"
            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
               value: "{{- .Values.init.noReply -}}"
@@ -86,5 +88,5 @@ metadata:
     secret: linshare-root-account
 {{ include "linshare.labels" . | indent 4 }}
 data:
-  root-password: "{{ randAlphaNum 12 | b64enc }}"
+  root-password: "{{ randAlphaNum 16 | b64enc }}"
   root-user: "{{ "root@localhost.localdomain" | b64enc }}"
