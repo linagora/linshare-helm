@@ -47,6 +47,8 @@ spec:
               value: "mongodb://{{ include "linshare.fullname" . }}-mongodb:27017/linshare"
             - name: MONGODB_URI_SMALLFILES
               value: "mongodb://{{ include "linshare.fullname" . }}-mongodb:27017/linshare-files"
+            - name: MONGODB_URI_BIGFILES
+              value: "mongodb://{{ include "linshare.fullname" .  }}-mongodb:27017/linshare-bigfiles"
             - name: POSTGRES_HOST
               value: "{{ include "linshare.fullname" . }}-database"
             - name: POSTGRES_PORT
