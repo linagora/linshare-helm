@@ -64,7 +64,7 @@ database:
   secretName: null
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-database
-    tag: 2.3.1
+    tag: 2.3.3
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -87,7 +87,7 @@ backend:
   # If you want  to override default generated secret name.
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-backend
-    tag: 2.3.0
+    tag: 2.3.3
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -102,7 +102,7 @@ uiAdmin:
   externalUrl: null
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin
-    tag: 3.3.0
+    tag: 3.3.2
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -118,14 +118,14 @@ init:
   extraJwtKeyName: extraJwtKeyName
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-init
-    tag: 2.3.1
+    tag: 2.3.3
     pullPolicy: IfNotPresent
 
 uiUser:
   externalUrl: null
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user
-    tag: 2.3.0
+    tag: 2.3.3
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
