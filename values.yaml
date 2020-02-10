@@ -21,6 +21,7 @@ service:
   type: ClusterIP
   port: 80
 
+# enable deployment of ingresses.
 ingress:
   enabled: false
   annotations: {}
@@ -32,6 +33,17 @@ ingress:
     - host: linshare-user.local
       paths: '/'
       suffix: ui-user
+
+# enable deployment of traefik (v2) ingress routes
+ingressroutes:
+  enabled: false
+  annotations: {}
+  baseDomain: local
+  certResolver: default
+  hosts:
+    admin: linshare-admin.local
+    user: linshare-user.local
+    webmail: linshare-webmail.local
 
 nodeSelector: {}
 
