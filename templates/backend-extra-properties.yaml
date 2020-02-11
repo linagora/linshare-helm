@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "linshare.fullname" . }}-backend-extra-properties
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    cm: backend-extra-properties
+data:
+  linshare.extra.properties: |
+    jwt.global.key.private.path=/etc/linshare/private
+    jwt.global.key.public.path=/etc/linshare/public
+    {{- range .Values.backend.extraProperties }}
+    {{ . }}
+    {{- end }}

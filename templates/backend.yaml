@@ -18,6 +18,14 @@ spec:
         {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-backend
     spec:
+      volumes:
+      - name: backend-extra-properties
+        configMap:
+          name: {{ include "linshare.fullname" . }}-backend-extra-properties
+      - name: jwt-keys
+        secret:
+          secretName: "{{ .Values.backend.jwtKeysSecretName }}"
+          optional: true
       containers:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
@@ -82,11 +90,20 @@ spec:
               value: "0"
           ports:
             - containerPort: 8080
-	  {{- if .Values.database.resources }}
+          {{- if .Values.database.resources }}
           resources:
             {{- toYaml .Values.database.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: backend-extra-properties
+              mountPath: /etc/linshare/linshare.extra.properties
+              subPath: linshare.extra.properties
+            - name: jwt-keys
+              mountPath: /etc/linshare/private
+              subPath: private
+            - name: jwt-keys
+              mountPath: /etc/linshare/public
+              subPath: public
             - name: storage-filesystem
               mountPath: /var/lib/linshare/filesystemstorage
     {{- if .Values.imagePullSecrets }}

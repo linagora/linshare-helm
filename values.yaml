@@ -95,6 +95,10 @@ backend:
   profiles: default,jcloud,mongo,batches
   # profiles: sso,jcloud,mongo,batches
   thumbnail: true
+  # this secret should contains private and public keys for jwt tokens.
+  jwtKeysSecretName: linshare-jwt-keys
+  # looking for a configmap with some extra keys to add to linshare.properties
+  extraProperties: []
   # smtp: required smtp host
   # If you want  to override default generated secret name.
   image:
