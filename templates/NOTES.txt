@@ -14,3 +14,9 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80
 {{- end }}
+
+By default LinShare is looking for a secret named 'linshare-jwt-keys' containing
+private and public keys for JWT tokens. see jwtKeysSecretName in values.yaml to
+override it:
+
+kubectl -n {{ .Release.Namespace }} create secret generic linshare-jwt-keys --from-file ./linshare-jwt-keys/private --from-file ./linshare-jwt-keys/public
