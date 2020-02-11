@@ -78,6 +78,8 @@ spec:
     {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-database
 ---
+{{- if .Values.database.secretName }}
+{{ else }}
 apiVersion: v1
 kind: Secret
 type: Opaque
@@ -90,3 +92,4 @@ metadata:
 data:
   postgres-password: "{{ randAlphaNum 12 | b64enc }}"
   postgres-user: "{{ "linshare" | b64enc }}"
+{{- end }}

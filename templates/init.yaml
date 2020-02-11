@@ -59,7 +59,7 @@ spec:
             - name: LS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.fullname" . }}-root-account
+                  name: {{ include "linshare.init.rootSecretName" . }}
                   key: root-password
             - name: LS_DOMAIN_PATTERN_NAME
               value: "pattern-demo"
@@ -77,6 +77,8 @@ spec:
       {{- end }}
     {{- end }}
 ---
+{{- if .Values.init.rootSecretName }}
+{{ else }}
 apiVersion: v1
 kind: Secret
 type: Opaque
@@ -90,3 +92,4 @@ metadata:
 data:
   root-password: "{{ randAlphaNum 16 | b64enc }}"
   root-user: "{{ "root@localhost.localdomain" | b64enc }}"
+{{- end }}

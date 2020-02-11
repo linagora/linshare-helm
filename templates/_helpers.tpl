@@ -52,12 +52,23 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the secret name for database linshare account
 */}}
 {{- define "linshare.database.secretName" -}}
 {{- if .Values.database.secretName -}}
 {{- .Values.database.secretName | trimSuffix "-" -}}
 {{- else -}}
 {{- include "linshare.fullname" . }}-database
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the secret name for root linshare account
+*/}}
+{{- define "linshare.init.rootSecretName" -}}
+{{- if .Values.init.rootSecretName -}}
+{{- .Values.init.rootSecretName | trimSuffix "-" -}}
+{{- else -}}
+{{- include "linshare.fullname" . }}-root-account
 {{- end -}}
 {{- end -}}

@@ -1,15 +1,5 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 # Default values for linshare.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-
-replicaCount: 1
-
-image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 # override release name
@@ -132,6 +122,7 @@ uiAdmin:
 init:
   noReply: no-reply@linshare.local
   extraJwtKeyName: extraJwtKeyName
+  rootSecretName: null
   image:
     repository: docker-registry.linagora.com:5000/linshare-releases/linshare-init
     tag: 2.3.3
