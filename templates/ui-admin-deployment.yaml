@@ -54,20 +54,3 @@ spec:
         - name: {{ . }}
       {{- end }}
     {{- end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "linshare.fullname" . }}-ui-admin
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-ui-admin
-spec:
-  ports:
-    - name: '80'
-      protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-ui-admin
