@@ -53,19 +53,3 @@ spec:
         resources:
           requests:
             storage: "{{- .Values.mongodb.storage.size }}"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "linshare.fullname" . }}-mongodb
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-mongodb
-spec:
-  clusterIP: None
-  ports:
-    - protocol: TCP
-      port: 27017
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-mongodb
