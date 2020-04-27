@@ -1,0 +1,16 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-backend
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-backend
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+  selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+    app: linshare-backend
