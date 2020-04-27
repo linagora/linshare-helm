@@ -122,18 +122,3 @@ spec:
         resources:
           requests:
             storage: "{{- .Values.backend.storage.size }}"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "linshare.fullname" . }}-backend
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-backend
-spec:
-  ports:
-    - protocol: TCP
-      port: 8080
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-backend

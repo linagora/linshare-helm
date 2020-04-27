@@ -76,20 +76,3 @@ spec:
         - name: {{ . }}
       {{- end }}
     {{- end }}
----
-{{- if .Values.init.rootSecretName }}
-{{ else }}
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: {{ include "linshare.fullname" . }}-root-account
-  annotations:
-    "helm.sh/resource-policy": keep
-  labels:
-    secret: linshare-root-account
-{{ include "linshare.labels" . | indent 4 }}
-data:
-  root-password: "{{ randAlphaNum 16 | b64enc }}"
-  root-user: "{{ "root@localhost.localdomain" | b64enc }}"
-{{- end }}

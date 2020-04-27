@@ -61,35 +61,3 @@ spec:
         resources:
           requests:
             storage: "{{- .Values.database.storage.size }}"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "linshare.fullname" . }}-database
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-database
-spec:
-  clusterIP: None
-  ports:
-    - protocol: TCP
-      port: 5432
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-database
----
-{{- if .Values.database.secretName }}
-{{ else }}
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: {{ include "linshare.fullname" . }}-database
-  annotations:
-    "helm.sh/resource-policy": keep
-  labels:
-{{ include "linshare.labels" . | indent 4 }}
-data:
-  postgres-password: "{{ randAlphaNum 12 | b64enc }}"
-  postgres-user: "{{ "linshare" | b64enc }}"
-{{- end }}

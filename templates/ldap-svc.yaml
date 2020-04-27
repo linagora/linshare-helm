@@ -1,0 +1,20 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.enabled -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "linshare.fullname" . }}-ldap
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-ldap
+spec:
+  ports:
+    - name: '389'
+      protocol: TCP
+      port: 389
+      targetPort: 389
+  selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+    app: linshare-ldap
+{{- end }}

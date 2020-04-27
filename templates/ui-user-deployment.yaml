@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ include "linshare.fullname" . }}-ui-admin"
+  name: "{{ include "linshare.fullname" . }}-ui-user"
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 spec:
@@ -15,16 +15,16 @@ spec:
     metadata:
       labels:
         {{- include "linshare.selectorLabels" . | nindent 8 }}
-        app: linshare-ui-admin
+        app: linshare-ui-user
     spec:
       containers:
-        - name: ui-admin
-          image: "{{ .Values.uiAdmin.image.repository }}:{{ .Values.uiAdmin.image.tag }}"
-          imagePullPolicy: {{ .Values.uiAdmin.image.pullPolicy }}
+        - name: ui-user
+          image: "{{ .Values.uiUser.image.repository }}:{{ .Values.uiUser.image.tag }}"
+          imagePullPolicy: {{ .Values.uiUser.image.pullPolicy }}
           env:
-          {{- if .Values.uiAdmin.externalUrl }}
+          {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
-              value: "{{- .Values.uiAdmin.externalUrl -}}"
+              value: "{{- .Values.uiUser.externalUrl -}}"
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'
@@ -32,9 +32,9 @@ spec:
               value: {{ include "linshare.fullname" . }}-backend
           ports:
             - containerPort: 80
-	  {{- if .Values.uiAdmin.resources }}
+          {{- if .Values.uiUser.resources }}
           resources:
-            {{- toYaml .Values.uiAdmin.resources | nindent 12 }}
+            {{- toYaml .Values.uiUser.resources | nindent 12 }}
           {{- end }}
           readinessProbe:
             httpGet:
@@ -54,20 +54,3 @@ spec:
         - name: {{ . }}
       {{- end }}
     {{- end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "linshare.fullname" . }}-ui-admin
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-ui-admin
-spec:
-  ports:
-    - name: '80'
-      protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-ui-admin
