@@ -1,5 +1,21 @@
 apiVersion: v1
-appVersion: "1.0"
-description: A Helm chart for Kubernetes
 name: linshare
 version: 0.1.0
+appVersion: "2.3"
+home: https://github.com/linagora/linshare
+description: A Helm chart for LinShare
+icon: https://www.linshare.org/favicon.ico
+keywords:
+  - ingress
+  - traefik
+  - postgresql
+  - mongodb
+  - java
+  - tomcat
+  - linshare
+sources:
+  - https://ci.linagora.com/linagora/lgs/linshare/saas/linshare-helm/ 
+maintainers:
+  - name: Frederic MARTIN
+    email: fmartin@linagora.com
+kubeVersion: ">=1.16.0-0"
