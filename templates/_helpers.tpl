@@ -63,6 +63,17 @@ Create the secret name for database linshare account
 {{- end -}}
 
 {{/*
+Create the secret name for mongodb linshare account
+*/}}
+{{- define "linshare.mongodb.secretName" -}}
+{{- if .Values.mongodb.secretName -}}
+{{- .Values.mongodb.secretName | trimSuffix "-" -}}
+{{- else -}}
+{{- include "linshare.fullname" . }}-mongodb
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the secret name for root linshare account
 */}}
 {{- define "linshare.init.rootSecretName" -}}

@@ -46,9 +46,11 @@ mongodb:
   storage:
     size: 2Gi
     class: cinder-classic
+  # If you want  to override default generated secret name.
+  secretName: null
   image:
     repository: mongo
-    tag: 3.2
+    tag: 4.2
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -65,8 +67,8 @@ database:
   # If you want  to override default generated secret name.
   secretName: null
   image:
-    repository: docker-registry.linagora.com:5000/linshare-releases/linshare-database
-    tag: 2.3.5
+    repository: docker-registry.linagora.com:5000/linshare-snapshots/linshare-database
+    tag: 4.0.0
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -92,8 +94,8 @@ backend:
   # smtp: required smtp host
   # If you want  to override default generated secret name.
   image:
-    repository: docker-registry.linagora.com:5000/linshare-releases/linshare-backend
-    tag: 2.3.5
+    repository: docker-registry.linagora.com:5000/linshare-snapshots/linshare-backend
+    tag: 4.0.0
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -107,8 +109,8 @@ backend:
 uiAdmin:
   externalUrl: null
   image:
-    repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin
-    tag: 3.3.3
+    repository: docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-admin
+    tag: 4.0.0
     pullPolicy: IfNotPresent
   resources: {}
   # limits:
@@ -131,8 +133,8 @@ init:
 uiUser:
   externalUrl: null
   image:
-    repository: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user
-    tag: 2.3.5
+    repository: docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-user
+    tag: 4.0.0
     pullPolicy: IfNotPresent
   resources: {}
   # limits:

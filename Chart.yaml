@@ -1,7 +1,7 @@
 apiVersion: v1
 name: linshare
-version: 0.1.0
-appVersion: "2.3"
+version: 0.2.0
+appVersion: "4.0"
 home: https://github.com/linagora/linshare
 description: A Helm chart for LinShare
 icon: https://www.linshare.org/favicon.ico
