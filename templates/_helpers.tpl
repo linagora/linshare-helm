@@ -83,3 +83,10 @@ Create the secret name for root linshare account
 {{- include "linshare.fullname" . }}-root-account
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create a random secret
+*/}}
+{{- define "linshare.random.secret" -}}
+{{- printf "%s@" (randAlphaNum 16) | b64enc -}}
+{{- end -}}
