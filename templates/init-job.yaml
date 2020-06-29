@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ include "linshare.fullname" . }}-init"
+  name: "init"
   labels:
 {{ include "linshare.labels" . | indent 4 }}
 spec:
@@ -32,7 +32,7 @@ spec:
             - name: LS_DEBUG
               value: "0"
             - name: LS_SERVER_HOST
-              value: {{ include "linshare.fullname" . }}-backend
+              value: backend
             - name: LS_SERVER_PORT
               value: "8080"
            {{- if .Values.uiUser.externalUrl }}
@@ -47,7 +47,7 @@ spec:
             - name: LS_LDAP_NAME
               value: "ldap-demo"
             - name: LS_LDAP_URL
-              value: "ldap://{{ include "linshare.fullname" . }}-ldap:389"
+              value: "ldap://ldap:389"
             - name: LS_LDAP_BASE_DN
               value: "ou=People,dc=linshare,dc=org"
             - name: LS_LDAP_DN

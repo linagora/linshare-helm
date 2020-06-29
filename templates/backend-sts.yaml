@@ -3,11 +3,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "linshare.fullname" . }}-backend
+  name: backend
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 spec:
-  serviceName: "{{ include "linshare.fullname" . }}-backend"
+  serviceName: backend"
   replicas: 1
   selector:
     matchLabels:
@@ -21,7 +21,7 @@ spec:
       volumes:
       - name: backend-extra-properties
         configMap:
-          name: {{ include "linshare.fullname" . }}-backend-extra-properties
+          name: backend-extra-properties
       - name: jwt-keys
         secret:
           secretName: "{{ .Values.backend.jwtKeysSecretName }}"
@@ -54,22 +54,22 @@ spec:
             - name: CLAMAV_PORT
               value: "3310"
             - name: MONGODB_DATA_REPLICA_SET
-              value: "{{ include "linshare.fullname" . }}-mongodb:27017"
+              value: "mongodb:27017"
             - name: MONGODB_SMALLFILES_REPLICA_SET
-              value: "{{ include "linshare.fullname" . }}-mongodb:27017"
+              value: "mongodb:27017"
             - name: POSTGRES_HOST
-              value: "{{ include "linshare.fullname" . }}-database"
+              value: "database"
             - name: POSTGRES_PORT
               value: "5432"
 	          {{- if .Values.backend.thumbnail }}
             - name: THUMBNAIL_ENABLE
               value: "true"
             - name: THUMBNAIL_HOST
-              value: "{{ include "linshare.fullname" . }}-thumbnail-server"
+              value: "thumbnail-server"
             {{- end }}
             {{- if .Values.demo.enabled }}
             - name: SMTP_HOST
-              value: "{{ include "linshare.fullname" . }}-mail"
+              value: "mail"
             {{ else }}
             - name: SMTP_HOST
               value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"

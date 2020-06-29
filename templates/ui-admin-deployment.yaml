@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ include "linshare.fullname" . }}-ui-admin"
+  name: "ui-admin"
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 spec:
@@ -29,7 +29,7 @@ spec:
             - name: TOMCAT_PORT
               value: '8080'
             - name: TOMCAT_URL
-              value: {{ include "linshare.fullname" . }}-backend
+              value: backend
           ports:
             - containerPort: 80
 	  {{- if .Values.uiAdmin.resources }}

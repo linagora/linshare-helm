@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ include "linshare.fullname" . }}-mail"
+  name: "mail"
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 data:
@@ -148,7 +148,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ include "linshare.fullname" . }}-webmail"
+  name: "webmail"
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 data:

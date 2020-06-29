@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "linshare.fullname" . }}-thumbnail-server
+  name: thumbnail-server
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 spec:

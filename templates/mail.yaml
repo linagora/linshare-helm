@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ include "linshare.fullname" . }}-mail"
+  name: "mail"
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
 spec:
@@ -22,10 +22,10 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: "{{ include "linshare.fullname" . }}-mail"
+          name: "mail"
       - name: config-web
         configMap:
-          name: "{{ include "linshare.fullname" . }}-webmail"
+          name: "webmail"
       containers:
         - name: webmail
           image: "{{ .Values.mail.frontend.image.repository }}:{{ .Values.mail.frontend.image.tag }}"
@@ -79,7 +79,7 @@ spec:
             - name: DOMAINNAME
               value: "linshare.org"
             - name: LDAP_SERVER_HOST
-              value: "{{ include "linshare.fullname" . }}-ldap"
+              value: "ldap"
             - name: LDAP_SEARCH_BASE
               value: "ou=People,dc=linshare,dc=org"
             - name: LDAP_BIND_DN
@@ -102,7 +102,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "linshare.fullname" . }}-mail
+  name: mail
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-mail

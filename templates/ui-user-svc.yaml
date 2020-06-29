@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "linshare.fullname" . }}-ui-user
+  name: ui-user
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-ui-user

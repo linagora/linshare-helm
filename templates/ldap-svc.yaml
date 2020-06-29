@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "linshare.fullname" . }}-ldap
+  name: ldap
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-ldap
