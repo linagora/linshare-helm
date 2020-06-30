@@ -1,0 +1,23 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if eq .Values.mail.deploy "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
+    svc: linshare-mail
+spec:
+  ports:
+    - name: '25'
+      protocol: TCP
+      port: 25
+      targetPort: 25
+    - name: '80'
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+    app: linshare-mail
+{{- end }}

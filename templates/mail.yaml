@@ -1,6 +1,4 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if .Values.demo.enabled -}}
----
+{{- if eq .Values.mail.deploy "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,8 +26,7 @@ spec:
           name: "webmail"
       containers:
         - name: webmail
-          image: "{{ .Values.mail.frontend.image.repository }}:{{ .Values.mail.frontend.image.tag }}"
-          imagePullPolicy: {{ .Values.mail.frontend.image.pullPolicy }}
+          image: {{ .Values.mail.frontend.image }}
           volumeMounts:
             - name: config-web
               mountPath: /var/www/config/config.inc.php
@@ -44,7 +41,7 @@ spec:
           ports:
             - containerPort: 80
         - name: mail
-          image: "{{ .Values.mail.backend.image.repository }}:{{ .Values.mail.backend.image.tag }}"
+          image: {{ .Values.mail.backend.image }}
           imagePullPolicy: {{ .Values.mail.backend.image.pullPolicy }}
           volumeMounts:
             - name: config
@@ -88,35 +85,15 @@ spec:
               value: "linshare"
           ports:
             - containerPort: 25
-          {{- if .Values.uiUser.resources }}
           resources:
-            {{- toYaml .Values.uiUser.resources | nindent 12 }}
-          {{- end }}
-    {{- if .Values.imagePullSecrets }}
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
+    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-registry-secret
     {{- end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mail
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
-    svc: linshare-mail
-spec:
-  ports:
-    - name: '25'
-      protocol: TCP
-      port: 25
-      targetPort: 25
-    - name: '80'
-      protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
-    app: linshare-mail
 {{- end }}

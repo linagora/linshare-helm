@@ -1,6 +1,4 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if .Values.demo.enabled -}}
----
+{{- if eq .Values.ldap.deploy "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,14 +22,15 @@ spec:
           imagePullPolicy: {{ .Values.ldap.image.pullPolicy }}
           ports:
             - containerPort: 389
-	        {{- if .Values.ldap.resources }}
           resources:
-            {{- toYaml .Values.ldap.resources | nindent 12 }}
-          {{- end }}
-    {{- if .Values.imagePullSecrets }}
+            limits:
+              cpu: "700m"
+              memory: "2Gi"
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+    {{- if .Values.dockerRegistrySecret }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: {{- .Values.dockerRegistrySecret }}
     {{- end }}
 {{- end }}

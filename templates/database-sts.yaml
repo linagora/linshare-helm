@@ -1,5 +1,3 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -20,8 +18,7 @@ spec:
     spec:
       containers:
         - name: database
-          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
-          imagePullPolicy: {{ .Values.database.image.pullPolicy }}
+          image: {{ .Values.database.image }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
@@ -37,27 +34,30 @@ spec:
                   key: postgres-password
           ports:
             - containerPort: 5432
-          {{- if .Values.database.resources }}
           resources:
-            {{- toYaml .Values.database.resources | nindent 12 }}
-          {{- end }}
+            limits:
+              cpu: "700m"
+              memory: "2Gi"
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
           volumeMounts:
             - mountPath: /var/lib/postgresql/data/
               name: pg-data
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-registry-secret
     {{- end }}
+{{- if and (.Values.database.storageSize) (.Values.database.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: "{{- .Values.database.storage.class }}"
+          volume.beta.kubernetes.io/storage-class: "{{- .Values.database.storageClass }}"
         name: pg-data
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: "{{- .Values.database.storage.size }}"
+            storage: "{{- .Values.database.storageSize }}"
+{{- end }}

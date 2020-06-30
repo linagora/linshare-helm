@@ -1,9 +1,8 @@
 {{- if .Values.ingressroutes.enabled -}}
-{{- $fullName := include "linshare.fullname" . -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ $fullName }}
+  name: linshare
   labels:
     ingressroute: linshare
 {{ include "linshare.labels" . | indent 4 }}
@@ -20,7 +19,7 @@ spec:
   - match: Host(`{{- .Values.ingressroutes.hosts.admin -}}`)
     kind: Rule
     services:
-    - name: {{ include "linshare.fullname" . }}-ui-admin
+    - name: ui-admin
       port: 80
       # (default 1) A weight used by the weighted round-robin strategy (WRR).
       weight: 1
@@ -35,7 +34,7 @@ spec:
     kind: Rule
     priority: 12
     services:
-    - name: {{ include "linshare.fullname" . }}-ui-user
+    - name: ui-user
       port: 80
       weight: 1
       passHostHeader: true
@@ -45,7 +44,7 @@ spec:
     kind: Rule
     priority: 12
     services:
-    - name: {{ include "linshare.fullname" . }}-mail
+    - name: mail
       port: 80
       weight: 1
       passHostHeader: true

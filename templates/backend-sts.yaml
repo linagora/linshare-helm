@@ -1,5 +1,3 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -28,8 +26,7 @@ spec:
           optional: true
       containers:
         - name: backend
-          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
-          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          image: {{ .Values.backend.image }}
           readinessProbe:
             httpGet:
               path: /linshare/
@@ -72,7 +69,7 @@ spec:
               value: "mail"
             {{ else }}
             - name: SMTP_HOST
-              value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"
+              value: "{{ .Values.backend.smtp }}"
             {{- end }}
             - name: SMTP_PORT
               value: "25"
@@ -116,19 +113,19 @@ spec:
               subPath: public
             - name: storage-filesystem
               mountPath: /var/lib/linshare/filesystemstorage
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-registry-secret
     {{- end }}
+{{- if and (.Values.backend.storageSize) (.Values.backend.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: "{{- .Values.backend.storage.class }}"
+          volume.beta.kubernetes.io/storage-class: {{ .Values.backend.storageClass }}
         name: storage-filesystem
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: "{{- .Values.backend.storage.size }}"
+            storage: {{ .Values.backend.storageSize }}
+{{- end }}

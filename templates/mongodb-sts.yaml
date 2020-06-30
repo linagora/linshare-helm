@@ -1,5 +1,3 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -21,8 +19,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
-          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+          image: {{ .Values.mongodb.image }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
@@ -36,27 +33,29 @@ spec:
                   key: mongodb-password
           ports:
             - containerPort: 27017
-          {{- if .Values.mongodb.resources }}
           resources:
-            {{- toYaml .Values.mongodb.resources | nindent 12 }}
-          {{- end }}
+            limits:
+              cpu: "700m"
+              memory: "2Gi"
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
           volumeMounts:
             - name: mongodb-persistent-storage
               mountPath: /data/db
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-registry-secret
     {{- end }}
+{{- if and (.Values.mongodb.storageSize) (.Values.mongodb.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: "{{- .Values.mongodb.storage.class }}"
+          volume.beta.kubernetes.io/storage-class: "{{- .Values.mongodb.storageClass }}"
         name: mongodb-persistent-storage
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: "{{- .Values.mongodb.storage.size }}"
+            storage: "{{- .Values.mongodb.storageSize }}"

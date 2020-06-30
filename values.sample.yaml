@@ -1,0 +1,90 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+# Default values for linshare.
+service:
+  type: ClusterIP
+  port: 80
+
+# enable deployment of ingresses.
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: "traefik"
+  hosts:
+    - host: linshare-admin.local
+      path: '/'
+      suffix: ui-admin
+    - host: linshare-user.local
+      paths: '/'
+      suffix: ui-user
+
+# enable deployment of traefik (v2) ingress routes
+ingressroutes:
+  enabled: false
+  annotations: {}
+  baseDomain: local
+  certResolver: default
+  hosts:
+    admin: linshare-admin.local
+    user: linshare-user.local
+    webmail: linshare-webmail.local
+
+
+mongodb:
+  storageSize: 2Gi
+  storageClass: cinder-classic
+  # If you want  to override default generated secret name.
+  secretName: null
+  image: "mongo:4.2"
+
+database:
+  storageSize: 1Gi
+  storageClass: cinder-classic
+  # If you want  to override default generated secret name.
+  secretName: null
+  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
+
+backend:
+  storageSize: 20Gi
+  storageClass: cinder-classic
+  ssoIpFilter: false
+  profiles: default,jcloud,batches
+  # profiles: sso,jcloud,batches
+  thumbnail: true
+  # this secret should contains private and public keys for jwt tokens.
+  jwtKeysSecretName: linshare-jwt-keys
+  # looking for a configmap with some extra keys to add to linshare.properties
+  extraProperties: []
+  smtp: 127.0.0.1
+  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-backend:4.0.0"
+
+
+uiAdmin:
+  externalUrl: null
+  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-admin:4.0.0"
+
+init:
+  noReply: no-reply@linshare.local
+  extraJwtKeyName: extraJwtKeyName
+  rootSecretName: null
+  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.5"
+
+uiUser:
+  externalUrl: null
+  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-user:4.0.0"
+
+
+thumbnail:
+  externalUrl: null
+  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.0.3"
+
+# if you enable the demo mode, you may want to also deploy the ldap service too.
+ldap:
+  deploy: "false"
+  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
+
+mail:
+  deploy: "false"
+  backend:
+    image: "tvial/docker-mailserver:2.1"
+  frontend:
+    image: "robbertkl/roundcube"

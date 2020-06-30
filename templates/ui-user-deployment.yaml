@@ -1,5 +1,3 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,8 +17,7 @@ spec:
     spec:
       containers:
         - name: ui-user
-          image: "{{ .Values.uiUser.image.repository }}:{{ .Values.uiUser.image.tag }}"
-          imagePullPolicy: {{ .Values.uiUser.image.pullPolicy }}
+          image: {{ .Values.uiUser.image }}
           env:
           {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
@@ -32,10 +29,13 @@ spec:
               value: backend
           ports:
             - containerPort: 80
-          {{- if .Values.uiUser.resources }}
           resources:
-            {{- toYaml .Values.uiUser.resources | nindent 12 }}
-          {{- end }}
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
           readinessProbe:
             httpGet:
               path: /index.html
@@ -48,9 +48,7 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 30
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-registry-secret
     {{- end }}

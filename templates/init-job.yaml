@@ -1,5 +1,3 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -23,8 +21,7 @@ spec:
             optional: true
       containers:
         - name: init
-          image: "{{ .Values.init.image.repository }}:{{ .Values.init.image.tag }}"
-          imagePullPolicy: {{ .Values.init.image.pullPolicy }}
+          image: {{ .Values.init.image }}
           volumeMounts:
             - name: extra-jwt-key
               mountPath: /linagora/data/
@@ -70,9 +67,7 @@ spec:
             - name: LS_JWT_PUB_KEY
               value: "/linagora/data/public"
            {{- end }}
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.dockerRegistrySecret }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: {{ .Values.dockerRegistrySecret }}
     {{- end }}

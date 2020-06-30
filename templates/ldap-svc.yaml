@@ -1,6 +1,4 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if .Values.demo.enabled -}}
----
+{{- if eq .Values.ldap.deploy "true" }}
 apiVersion: v1
 kind: Service
 metadata:

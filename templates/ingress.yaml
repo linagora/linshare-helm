@@ -1,9 +1,8 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "linshare.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: linshare
   labels:
 {{ include "linshare.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -18,7 +17,7 @@ spec:
         paths:
           - path: {{ .path }}
             backend:
-              serviceName: {{ $fullName }}-{{.suffix}}
+              serviceName: linshare-{{.suffix}}
               servicePort: 80
   {{- end }}
 {{- end }}
