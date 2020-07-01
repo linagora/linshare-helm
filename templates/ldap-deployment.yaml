@@ -3,23 +3,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "ldap"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      linshare-ldap
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-ldap
     spec:
       containers:
         - name: ldap
-          image: "{{ .Values.ldap.image.repository }}:{{ .Values.ldap.image.tag }}"
-          imagePullPolicy: {{ .Values.ldap.image.pullPolicy }}
+          image: {{ .Values.ldap.image | quote }}
           ports:
             - containerPort: 389
           resources:
@@ -31,6 +27,6 @@ spec:
               memory: "1Gi"
     {{- if .Values.dockerRegistrySecret }}
       imagePullSecrets:
-        - name: {{- .Values.dockerRegistrySecret }}
+        - name: {{ .Values.dockerRegistrySecret }}
     {{- end }}
 {{- end }}

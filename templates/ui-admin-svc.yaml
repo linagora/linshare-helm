@@ -1,11 +1,8 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
----
 apiVersion: v1
 kind: Service
 metadata:
   name: ui-admin
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-ui-admin
 spec:
   ports:
@@ -14,5 +11,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-ui-admin

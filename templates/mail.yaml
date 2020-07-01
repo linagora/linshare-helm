@@ -3,18 +3,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "mail"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
       app: linshare-mail
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-mail
     spec:
       volumes:
@@ -26,7 +22,7 @@ spec:
           name: "webmail"
       containers:
         - name: webmail
-          image: {{ .Values.mail.frontend.image }}
+          image: {{ .Values.mail.frontend.image | quote }}
           volumeMounts:
             - name: config-web
               mountPath: /var/www/config/config.inc.php
@@ -41,8 +37,7 @@ spec:
           ports:
             - containerPort: 80
         - name: mail
-          image: {{ .Values.mail.backend.image }}
-          imagePullPolicy: {{ .Values.mail.backend.image.pullPolicy }}
+          image: {{ .Values.mail.backend.image | quote }}
           volumeMounts:
             - name: config
               mountPath: /etc/postfix/main.cf

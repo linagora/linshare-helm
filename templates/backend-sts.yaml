@@ -2,18 +2,15 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: backend
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
-  serviceName: backend"
+  serviceName: "backend"
   replicas: 1
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-backend
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-backend
     spec:
       volumes:
@@ -26,7 +23,7 @@ spec:
           optional: true
       containers:
         - name: backend
-          image: {{ .Values.backend.image }}
+          image: {{ .Values.backend.image | quote }}
           readinessProbe:
             httpGet:
               path: /linshare/
@@ -41,9 +38,9 @@ spec:
             periodSeconds: 30
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "{{- .Values.backend.profiles }}"
+              value: "{{ .Values.backend.profiles }}"
             - name: SSO_IP_LIST_ENABLE
-              value: "{{- .Values.backend.ssoIpFilter }}"
+              value: "{{ .Values.backend.ssoIpFilter }}"
             - name: JAVA_XMX
               value: "2048m"
             - name: CLAMAV_HOST
@@ -97,10 +94,13 @@ spec:
               value: "0"
           ports:
             - containerPort: 8080
-          {{- if .Values.database.resources }}
           resources:
-            {{- toYaml .Values.database.resources | nindent 12 }}
-          {{- end }}
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+            requests:
+              cpu: "1"
+              memory: "1Gi"
           volumeMounts:
             - name: backend-extra-properties
               mountPath: /etc/linshare/linshare.extra.properties
@@ -121,11 +121,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.backend.storageClass }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.backend.storageClass | quote }}
         name: storage-filesystem
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: {{ .Values.backend.storageSize }}
+            storage: {{ .Values.backend.storageSize | quote }}
 {{- end }}

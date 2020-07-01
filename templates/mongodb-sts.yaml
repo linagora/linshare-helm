@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "mongodb"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
+  name: mongodb
 spec:
   serviceName: "mongodb"
   replicas: 1
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      linshare-mongodb
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-mongodb
     spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: {{ .Values.mongodb.image }}
+          image: {{ .Values.mongodb.image | quote }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
@@ -51,11 +48,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: "{{- .Values.mongodb.storageClass }}"
+          volume.beta.kubernetes.io/storage-class: {{ .Values.mongodb.storageClass | quote }}
         name: mongodb-persistent-storage
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: "{{- .Values.mongodb.storageSize }}"
+            storage: {{ .Values.mongodb.storageSize | quote }}

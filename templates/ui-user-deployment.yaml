@@ -1,27 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "ui-user"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
+  name: ui-user
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-ui-user
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-ui-user
     spec:
       containers:
         - name: ui-user
-          image: {{ .Values.uiUser.image }}
+          image: {{ .Values.uiUser.image | quote }}
           env:
           {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
-              value: "{{- .Values.uiUser.externalUrl -}}"
+              value: {{ .Values.uiUser.externalUrl | quote }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'

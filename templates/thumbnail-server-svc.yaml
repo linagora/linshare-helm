@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: thumbnail-server
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-thumbnail-server
 spec:
   ports:
@@ -16,5 +15,4 @@ spec:
       port: 8081
       targetPort: 8081
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-thumbnail-server

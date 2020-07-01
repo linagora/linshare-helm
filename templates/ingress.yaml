@@ -1,14 +1,10 @@
-{{- if .Values.ingress.enabled -}}
+{{- if eq .Values.ingress.enabled "true" }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: linshare
-  labels:
-{{ include "linshare.labels" . | indent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 -}}
-  {{- end }}
+    kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
   {{- range .Values.ingress.hosts }}

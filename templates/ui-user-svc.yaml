@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: ui-user
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-ui-user
 spec:
   ports:
@@ -12,5 +11,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-ui-user

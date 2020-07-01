@@ -2,23 +2,20 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: "database"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   serviceName: "database"
   replicas: 1
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-database
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-database
     spec:
       containers:
         - name: database
-          image: {{ .Values.database.image }}
+          image: {{ .Values.database.image | quote }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
@@ -52,12 +49,12 @@ spec:
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: "{{- .Values.database.storageClass }}"
+          volume.beta.kubernetes.io/storage-class: {{ .Values.database.storageClass | quote }}
         name: pg-data
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: "{{- .Values.database.storageSize }}"
+            storage: {{ .Values.database.storageSize | quote }}
 {{- end }}

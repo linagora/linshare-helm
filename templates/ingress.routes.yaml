@@ -1,22 +1,19 @@
-{{- if .Values.ingressroutes.enabled -}}
+{{- if eq .Values.ingressroutes.enabled "true"}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: linshare
   labels:
     ingressroute: linshare
-{{ include "linshare.labels" . | indent 4 }}
-  {{- with .Values.ingressroutes.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 -}}
-  {{- end }}
+    kubernetes.io/ingress.class: "traefik"
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`{{- .Values.ingressroutes.baseDomain -}}`)
+  - match: Host(`{{ .Values.ingressroutes.baseDomain }}`)
     kind: Rule
-  - match: Host(`{{- .Values.ingressroutes.hosts.admin -}}`)
+  - match: Host(`{{ .Values.ingressroutes.hosts.admin }}`)
     kind: Rule
     services:
     - name: ui-admin
@@ -30,7 +27,7 @@ spec:
       responseForwarding:
         # (default 100ms) Interval between flushes of the buffered response body to the client.
         flushInterval: 100ms
-  - match: Host(`{{- .Values.ingressroutes.hosts.user -}}`)
+  - match: Host(`{{ .Values.ingressroutes.hosts.user }}`)
     kind: Rule
     priority: 12
     services:
@@ -40,7 +37,7 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
-  - match: Host(`{{- .Values.ingressroutes.hosts.webmail -}}`)
+  - match: Host(`{{ .Values.ingressroutes.hosts.webmail }}`)
     kind: Rule
     priority: 12
     services:
@@ -55,5 +52,5 @@ spec:
     domains:
       - main: {{ .Values.ingressroutes.baseDomain }}
         sans:
-          - "*.{{- .Values.ingressroutes.baseDomain -}}"
+          - "*.{{ .Values.ingressroutes.baseDomain }}"
 {{- end }}

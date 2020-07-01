@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: database
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-database
 spec:
   clusterIP: None
@@ -11,5 +10,4 @@ spec:
     - protocol: TCP
       port: 5432
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-database

@@ -3,13 +3,10 @@ kind: Service
 metadata:
   name: mongodb
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-mongodb
 spec:
-  clusterIP: None
   ports:
     - protocol: TCP
       port: 27017
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-mongodb

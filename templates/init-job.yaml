@@ -1,17 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "init"
-  labels:
-{{ include "linshare.labels" . | indent 4 }}
+  name: init
 spec:
   activeDeadlineSeconds: 1800
   template:
     metadata:
       labels:
         app: linshare-init
-        app.kubernetes.io/name: {{ include "linshare.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       restartPolicy: OnFailure
       volumes:
@@ -21,7 +17,7 @@ spec:
             optional: true
       containers:
         - name: init
-          image: {{ .Values.init.image }}
+          image: {{ .Values.init.image | quote }}
           volumeMounts:
             - name: extra-jwt-key
               mountPath: /linagora/data/
@@ -34,12 +30,12 @@ spec:
               value: "8080"
            {{- if .Values.uiUser.externalUrl }}
             - name: LS_USER_URL
-              value: "{{- .Values.uiUser.externalUrl -}}"
+              value: "{{ .Values.uiUser.externalUrl }}"
             - name: LS_EXTERNAL_URL
-              value: "{{- .Values.uiUser.externalUrl -}}"
+              value: "{{ .Values.uiUser.externalUrl }}"
            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
-              value: "{{- .Values.init.noReply -}}"
+              value: "{{ .Values.init.noReply }}"
            {{- if .Values.demo.enabled }}
             - name: LS_LDAP_NAME
               value: "ldap-demo"

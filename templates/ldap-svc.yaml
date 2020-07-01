@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: ldap
   labels:
-    {{- include "linshare.labels" . | nindent 4 }}
     svc: linshare-ldap
 spec:
   ports:
@@ -13,6 +12,5 @@ spec:
       port: 389
       targetPort: 389
   selector:
-    {{- include "linshare.selectorLabels" . | nindent 4 }}
     app: linshare-ldap
 {{- end }}

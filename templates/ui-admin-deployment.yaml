@@ -2,26 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "ui-admin"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-ui-admin
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-ui-admin
     spec:
       containers:
         - name: ui-admin
-          image: {{ .Values.uiAdmin.image }}
+          image: {{ .Values.uiAdmin.image | quote }}
           env:
           {{- if .Values.uiAdmin.externalUrl }}
             - name: EXTERNAL_URL
-              value: "{{ .Values.uiAdmin.externalUrl }}"
+              value: {{ .Values.uiAdmin.externalUrl | quote }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'

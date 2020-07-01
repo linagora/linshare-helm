@@ -2,22 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: thumbnail-server
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "linshare.selectorLabels" . | nindent 6 }}
+      app: linshare-thumbnail-server
   template:
     metadata:
       labels:
-        {{- include "linshare.selectorLabels" . | nindent 8 }}
         app: linshare-thumbnail-server
     spec:
       containers:
         - name: thumbnail-server
-          image: {{ .Values.thumbnail.image }}
+          image: {{ .Values.thumbnail.image | quote }}
           resources:
             limits:
               cpu: "500m"
