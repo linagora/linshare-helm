@@ -4,9 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "mail"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
+  name: mail
 data:
   10-auth.conf: "##\n## Authentication processes\n##\n\n# Disable LOGIN command and
     all other plaintext authentications unless\n# SSL/TLS is used (LOGINDISABLED capability).
@@ -148,9 +146,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "webmail"
-  labels:
-    {{- include "linshare.labels" . | nindent 4 }}
+  name: webmail
 data:
   config.inc.php: |
     <?php

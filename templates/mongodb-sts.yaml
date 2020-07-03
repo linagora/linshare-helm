@@ -1,3 +1,4 @@
+{{- if eq .Values.mongodb.deploy "true"}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -7,7 +8,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      linshare-mongodb
+      app: linshare-mongodb
   template:
     metadata:
       labels:
@@ -56,3 +57,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.mongodb.storageSize | quote }}
+{{- end }}
+{{- end }}

@@ -7,7 +7,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      linshare-ldap
+      app: linshare-ldap
   template:
     metadata:
       labels:
