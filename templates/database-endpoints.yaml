@@ -1,12 +1,12 @@
-{{- if .Values.database.ips }}
+{{- if .Values.postgresql.ips }}
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: database-endpoints
+  name: postgresql-endpoints
 subsets:
   - addresses:
-  {{- range $index, $ip := .Values.database.ips }}
-      - hostname: database-{{ $index }}
+  {{- range $index, $ip := .Values.postgresql.ips }}
+      - hostname: postgresql-{{ $index }}
         ip: {{ $ip }}
   {{- end }}
     ports:

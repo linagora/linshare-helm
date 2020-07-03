@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "database"
+  name: postgresql
 spec:
-  serviceName: "database"
+  serviceName: "postgresql"
   replicas: 1
   selector:
     matchLabels:
@@ -14,20 +14,20 @@ spec:
         app: linshare-database
     spec:
       containers:
-        - name: database
-          image: {{ .Values.database.image | quote }}
+        - name: postgresql
+          image: {{ .Values.postgresql.image | quote }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.database.secretName" . }}
+                  name: postgresql
                   key: postgres-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.database.secretName" . }}
+                  name: postgresql
                   key: postgres-password
           ports:
             - containerPort: 5432
@@ -41,20 +41,18 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data/
               name: pg-data
-    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-    {{- end }}
-{{- if and (.Values.database.storageSize) (.Values.database.storageClass) }}
+{{- if and (.Values.postgresql.storageSize) (.Values.postgresql.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.database.storageClass | quote }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.postgresql.storageClass | quote }}
         name: pg-data
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ .Values.database.storageSize | quote }}
+            storage: {{ .Values.postgresql.storageSize | quote }}
 {{- end }}

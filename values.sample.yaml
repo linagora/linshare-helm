@@ -1,10 +1,10 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 # Default values for linshare.
 
-dockerRegistrySecret: "docker-registry-secret"
-
 demo:
-  enabled: "true"
+  ldapAsPod: "true"
+  mailServerAsPod: "true"
+  mongodbAsPod: "true"
+
 service:
   type: ClusterIP
   port: 80
@@ -31,7 +31,6 @@ ingressroutes:
     webmail: linshare-webmail.local
 
 mongodb:
-  deploy: "true"
   storageSize: 2Gi
   storageClass: cinder-classic
   # If you want  to override default generated secret name.
@@ -42,8 +41,7 @@ mongodb:
   #   - "1.2.3.5"
   #   - "1.2.3.6"
 
-database:
-  deploy: "true"
+postgresql:
   storageSize: 1Gi
   storageClass: cinder-classic
   # If you want  to override default generated secret name.
@@ -88,11 +86,9 @@ thumbnail:
 
 # if you enable the demo mode, you may want to also deploy the ldap service too.
 ldap:
-  deploy: "false"
   image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
 
 mail:
-  deploy: "false"
   backend:
     image: "tvial/docker-mailserver:2.1"
   frontend:

@@ -1,8 +1,8 @@
-{{- if eq .Values.mail.deploy "true" }}
+{{- if eq .Values.demo.mailServerAsPod "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "mail"
+  name: mail
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -87,8 +87,6 @@ spec:
             requests:
               cpu: "500m"
               memory: "500Mi"
-    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-    {{- end }}
 {{- end }}

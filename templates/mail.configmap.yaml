@@ -1,6 +1,4 @@
-# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if .Values.demo.enabled -}}
----
+{{- if eq .Values.demo.mailServerAsPod "true" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -105,7 +103,7 @@ data:
     default_pass_scheme = SSHA
     dn = cn=linshare,dc=linshare,dc=org
     dnpass = linshare
-    hosts = {{ include "linshare.fullname" . }}-ldap
+    hosts = ldap
     ldap_version        = 3
     auth_bind = yes
     pass_attrs          = uid=user,userPassword=password

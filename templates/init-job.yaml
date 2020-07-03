@@ -52,7 +52,7 @@ spec:
             - name: LS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.init.rootSecretName" . }}
+                  name: root-account
                   key: root-password
             - name: LS_DOMAIN_PATTERN_NAME
               value: "pattern-demo"
@@ -63,7 +63,5 @@ spec:
             - name: LS_JWT_PUB_KEY
               value: "/linagora/data/public"
            {{- end }}
-    {{- if .Values.dockerRegistrySecret }}
       imagePullSecrets:
-        - name: {{ .Values.dockerRegistrySecret }}
-    {{- end }}
+        - name: docker-registry-secret

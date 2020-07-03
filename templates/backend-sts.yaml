@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: linshare-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: linshare-backend
+        app: backend
     spec:
       volumes:
       - name: backend-extra-properties
@@ -52,7 +52,7 @@ spec:
             - name: MONGODB_SMALLFILES_REPLICA_SET
               value: "mongodb:27017"
             - name: POSTGRES_HOST
-              value: "database"
+              value: "postgresql"
             - name: POSTGRES_PORT
               value: "5432"
 	          {{- if .Values.backend.thumbnail }}
@@ -73,22 +73,22 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: "{{ include "linshare.database.secretName" . }}"
+                  name: postgresql
                   key: postgres-user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ include "linshare.database.secretName" . }}"
+                  name: postgresql
                   key: postgres-password
             - name: MONGODB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.mongodb.secretName" . }}
+                  name: mongodb
                   key: mongodb-user
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.mongodb.secretName" . }}
+                  name: mongodb
                   key: mongodb-password
             - name: START_DEBUG
               value: "0"
@@ -113,10 +113,8 @@ spec:
               subPath: public
             - name: storage-filesystem
               mountPath: /var/lib/linshare/filesystemstorage
-    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-    {{- end }}
 {{- if and (.Values.backend.storageSize) (.Values.backend.storageClass) }}
   volumeClaimTemplates:
     - metadata:

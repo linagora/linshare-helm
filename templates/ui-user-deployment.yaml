@@ -45,7 +45,5 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 30
-    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-    {{- end }}

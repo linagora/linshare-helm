@@ -1,12 +1,14 @@
+{{- if eq .Values.demo.mongodbAsPod "true" }}
 apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
   labels:
-    svc: linshare-mongodb
+    app: mongodb
 spec:
   ports:
     - protocol: TCP
       port: 27017
   selector:
-    app: linshare-mongodb
+    app: mongodb
+{{- end }}

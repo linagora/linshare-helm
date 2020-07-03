@@ -1,4 +1,4 @@
-{{- if eq .Values.mongodb.deploy "true"}}
+{{- if eq .Values.demo.mongodbAsPod "true"}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: linshare-mongodb
+      app: mongodb
   template:
     metadata:
       labels:
-        app: linshare-mongodb
+        app: mongodb
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -22,12 +22,12 @@ spec:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.mongodb.secretName" . }}
+                  name: mongodb
                   key: mongodb-user
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "linshare.mongodb.secretName" . }}
+                  name: mongodb
                   key: mongodb-password
           ports:
             - containerPort: 27017
@@ -41,10 +41,8 @@ spec:
           volumeMounts:
             - name: mongodb-persistent-storage
               mountPath: /data/db
-    {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-    {{- end }}
 {{- if and (.Values.mongodb.storageSize) (.Values.mongodb.storageClass) }}
   volumeClaimTemplates:
     - metadata:
