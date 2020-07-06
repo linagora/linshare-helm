@@ -55,9 +55,9 @@ backend:
   profiles: default,jcloud,batches
   # profiles: sso,jcloud,batches
   thumbnail: true
-  # looking for a configmap with some extra keys to add to linshare.properties
+  ##looking for a configmap with some extra keys to add to linshare.properties
   extraProperties: []
-  smtp: 127.0.0.1
+  #smtp: 127.0.0.1
   image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-backend:4.0.0"
 
 uiAdmin:

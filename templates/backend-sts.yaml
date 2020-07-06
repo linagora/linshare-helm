@@ -64,9 +64,9 @@ spec:
             {{- if eq .Values.demo.mailServerAsPod "true" }}
             - name: SMTP_HOST
               value: "mail"
-            {{ else }}
+            {{- else }}
             - name: SMTP_HOST
-              value: "{{ .Values.backend.smtp }}"
+              value: "{{- required "A valid smpt host is required !" .Values.backend.smtp -}}"
             {{- end }}
             - name: SMTP_PORT
               value: "25"
