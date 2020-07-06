@@ -61,7 +61,7 @@ spec:
             - name: THUMBNAIL_HOST
               value: "thumbnail-server"
             {{- end }}
-            {{- if .Values.demo.enabled }}
+            {{- if eq .Values.demo.mailServerAsPod "true" }}
             - name: SMTP_HOST
               value: "mail"
             {{ else }}
