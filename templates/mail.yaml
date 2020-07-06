@@ -16,10 +16,10 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: "mail"
+          name: mail
       - name: config-web
         configMap:
-          name: "webmail"
+          name: webmail
       containers:
         - name: webmail
           image: {{ .Values.mail.frontend.image | quote }}

@@ -33,8 +33,6 @@ ingressroutes:
 mongodb:
   storageSize: 2Gi
   storageClass: cinder-classic
-  # If you want  to override default generated secret name.
-  secretName: null
   image: "mongo:4.2"
     # ips:
   #   - "1.2.3.4"
@@ -44,8 +42,6 @@ mongodb:
 postgresql:
   storageSize: 1Gi
   storageClass: cinder-classic
-  # If you want  to override default generated secret name.
-  secretName: null
   image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
   # ips:
   #   - "1.2.3.4"
@@ -59,8 +55,6 @@ backend:
   profiles: default,jcloud,batches
   # profiles: sso,jcloud,batches
   thumbnail: true
-  # this secret should contains private and public keys for jwt tokens.
-  jwtKeysSecretName: linshare-jwt-keys
   # looking for a configmap with some extra keys to add to linshare.properties
   extraProperties: []
   smtp: 127.0.0.1
@@ -73,7 +67,6 @@ uiAdmin:
 init:
   noReply: no-reply@linshare.local
   extraJwtKeyName: extraJwtKeyName
-  rootSecretName: null
   image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.5"
 
 uiUser:
