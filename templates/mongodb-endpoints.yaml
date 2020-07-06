@@ -1,0 +1,14 @@
+{{- if .Values.mongodb.ips }}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: mongodb-endpoints
+subsets:
+  - addresses:
+  {{- range $index, $ip := .Values.mongodb.ips }}
+      - hostname: mongo-{{ $index }}
+        ip: {{ $ip }}
+  {{- end }}
+    ports:
+      - port: 27017
+{{- end -}}
