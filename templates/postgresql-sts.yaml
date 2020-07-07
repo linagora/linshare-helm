@@ -3,15 +3,15 @@ kind: StatefulSet
 metadata:
   name: postgresql
 spec:
-  serviceName: "postgresql"
+  serviceName: postgresql
   replicas: 1
   selector:
     matchLabels:
-      app: linshare-database
+      app: postgresql
   template:
     metadata:
       labels:
-        app: linshare-database
+        app: postgresql
     spec:
       containers:
         - name: postgresql
@@ -47,12 +47,12 @@ spec:
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.postgresql.storageClass | quote }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.postgresql.storageClass }}
         name: pg-data
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ .Values.postgresql.storageSize | quote }}
+            storage: {{ .Values.postgresql.storageSize }}
 {{- end }}

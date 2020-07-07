@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: backend
 spec:
-  serviceName: "backend"
+  serviceName: backend
   replicas: 1
   selector:
     matchLabels:
@@ -51,6 +51,8 @@ spec:
               value: "mongodb:27017"
             - name: MONGODB_SMALLFILES_REPLICA_SET
               value: "mongodb:27017"
+            - name: MONGODB_PORT
+              value: ""
             - name: POSTGRES_HOST
               value: "postgresql"
             - name: POSTGRES_PORT
@@ -119,11 +121,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.backend.storageClass | quote }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.backend.storageClass }}
         name: storage-filesystem
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: {{ .Values.backend.storageSize | quote }}
+            storage: {{ .Values.backend.storageSize }}
 {{- end }}

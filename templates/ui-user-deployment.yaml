@@ -18,7 +18,7 @@ spec:
           env:
           {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL
-              value: {{ .Values.uiUser.externalUrl | quote }}
+              value: {{ .Values.uiUser.externalUrl }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'
