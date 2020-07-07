@@ -1,9 +1,10 @@
 # Default values for linshare.
 
 demo:
-  ldapAsPod: "true"
-  mailServerAsPod: "true"
-  mongodbAsPod: "true"
+  enabled: true
+  ldapAsPod: true
+  mailServerAsPod: true
+  mongodbAsPod: true
 
 service:
   type: ClusterIP

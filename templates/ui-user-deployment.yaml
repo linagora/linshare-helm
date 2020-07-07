@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ui-user
-          image: {{ .Values.uiUser.image | quote }}
+          image: {{ .Values.uiUser.image }}
           env:
           {{- if .Values.uiUser.externalUrl }}
             - name: EXTERNAL_URL

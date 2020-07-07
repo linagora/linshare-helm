@@ -1,4 +1,4 @@
-{{- if eq .Values.demo.mailServerAsPod "true" }}
+{{- if .Values.demo.mailServerAsPod }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

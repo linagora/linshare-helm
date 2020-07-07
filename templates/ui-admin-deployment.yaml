@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
         - name: ui-admin
-          image: {{ .Values.uiAdmin.image | quote }}
+          image: {{ .Values.uiAdmin.image }}
           env:
           {{- if .Values.uiAdmin.externalUrl }}
             - name: EXTERNAL_URL
-              value: {{ .Values.uiAdmin.externalUrl | quote }}
+              value: {{ .Values.uiAdmin.externalUrl }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'

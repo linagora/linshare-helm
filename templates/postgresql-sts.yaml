@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: {{ .Values.postgresql.image | quote }}
+          image: {{ .Values.postgresql.image }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"

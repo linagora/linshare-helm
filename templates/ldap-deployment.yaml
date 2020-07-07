@@ -1,4 +1,4 @@
-{{- if eq .Values.demo.ldapAsPod "true" }}
+{{- if .Values.demo.ldapAsPod }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: {{ .Values.ldap.image | quote }}
+          image: {{ .Values.ldap.image }}
           ports:
             - containerPort: 389
           resources:

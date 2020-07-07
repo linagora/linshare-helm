@@ -17,7 +17,7 @@ spec:
             optional: true
       containers:
         - name: init
-          image: {{ .Values.init.image | quote }}
+          image: {{ .Values.init.image }}
           volumeMounts:
             - name: extra-jwt-key
               mountPath: /linagora/data/

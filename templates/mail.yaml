@@ -1,4 +1,4 @@
-{{- if eq .Values.demo.mailServerAsPod "true" }}
+{{- if .Values.demo.mailServerAsPod }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +22,7 @@ spec:
           name: webmail
       containers:
         - name: webmail
-          image: {{ .Values.mail.frontend.image | quote }}
+          image: {{ .Values.mail.frontend.image }}
           volumeMounts:
             - name: config-web
               mountPath: /var/www/config/config.inc.php
@@ -37,7 +37,7 @@ spec:
           ports:
             - containerPort: 80
         - name: mail
-          image: {{ .Values.mail.backend.image | quote }}
+          image: {{ .Values.mail.backend.image }}
           volumeMounts:
             - name: config
               mountPath: /etc/postfix/main.cf

@@ -23,7 +23,7 @@ spec:
           optional: true
       containers:
         - name: backend
-          image: {{ .Values.backend.image | quote }}
+          image: {{ .Values.backend.image }}
           readinessProbe:
             httpGet:
               path: /linshare/
@@ -61,7 +61,7 @@ spec:
             - name: THUMBNAIL_HOST
               value: "thumbnail-server"
             {{- end }}
-            {{- if eq .Values.demo.mailServerAsPod "true" }}
+            {{- if .Values.demo.mailServerAsPod }}
             - name: SMTP_HOST
               value: "mail"
             {{- else }}

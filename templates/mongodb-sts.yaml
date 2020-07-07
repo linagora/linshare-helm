@@ -1,4 +1,4 @@
-{{- if eq .Values.demo.mongodbAsPod "true"}}
+{{- if .Values.demo.mongodbAsPod }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -17,7 +17,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: {{ .Values.mongodb.image | quote }}
+          image: {{ .Values.mongodb.image }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
