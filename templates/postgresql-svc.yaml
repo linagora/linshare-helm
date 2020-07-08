@@ -5,7 +5,6 @@ metadata:
   labels:
     svc: postgresql
 spec:
-  clusterIP: None
   ports:
     - protocol: TCP
       port: 5432
