@@ -1,9 +1,11 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 {{- if eq .Values.ingressroutes.enabled "true"}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: linshare
   labels:
+    helm.sh/chart: {{ .Chart.Version }}
     ingressroute: linshare
   annotations:
     kubernetes.io/ingress.class: "traefik"

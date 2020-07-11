@@ -1,3 +1,4 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -96,13 +97,10 @@ spec:
               value: "0"
           ports:
             - containerPort: 8080
+          {{- if .Values.backend.resources }}
           resources:
-            limits:
-              cpu: "2"
-              memory: "2Gi"
-            requests:
-              cpu: "1"
-              memory: "1Gi"
+            {{- toYaml .Values.database.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: backend-extra-properties
               mountPath: /etc/linshare/linshare.extra.properties
