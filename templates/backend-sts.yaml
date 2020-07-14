@@ -99,7 +99,7 @@ spec:
             - containerPort: 8080
           {{- if .Values.backend.resources }}
           resources:
-            {{- toYaml .Values.database.resources | nindent 12 }}
+            {{- toYaml .Values.backend.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: backend-extra-properties
