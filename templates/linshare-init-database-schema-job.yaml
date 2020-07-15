@@ -1,0 +1,48 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if not .Values.demo.postgresqlAsPod }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: linshare-init-database
+spec:
+  template:
+    metadata:
+      spec:
+        {{- if .Values.dockerCredentials }}
+        imagePullSecrets:
+        - name: docker-registry-secret
+        {{- end }}
+
+        restartPolicy: OnFailure
+        containers:
+        - name: linshare-init-database
+          image: {{ .Values.linshare.initDb.image }}
+          terminationMessagePolicy: FallbackToLogsOnError
+          env:
+          - name: POSTGRES_HOST
+            value: "postgresql"
+          - name: POSTGRES_PORT
+            value: "5433"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-postgresql-account-linshare
+                key: postgresql-username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-postgresql-account-linshare
+                key: postgresql-password
+          - name: POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: db-postgresql-account-linshare
+                key: postgresql-database
+          command:
+            - /bin/sh
+            - -e
+            - -c
+            - >
+              PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -d ${POSTGRES_DATABASE} -U ${POSTGRES_USER} < /createSchema.sql;
+              PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -d ${POSTGRES_DATABASE} -U ${POSTGRES_USER} < /import-postgresql.sql
+{{- end }}

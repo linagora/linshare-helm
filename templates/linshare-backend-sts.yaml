@@ -1,0 +1,170 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: linshare-backend
+spec:
+  serviceName: linshare-backend
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linshare-backend
+  template:
+    metadata:
+      labels:
+        app: linshare-backend
+    spec:
+      volumes:
+      - name: backend-extra-properties
+        configMap:
+          name: linshare-backend-extra-properties
+      - name: jwt-keys
+        secret:
+          secretName: linshare-jwt-keys
+          optional: true
+      containers:
+        - name: backend
+          image: {{ .Values.linshare.backend.image }}
+          readinessProbe:
+            httpGet:
+              path: /linshare/
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /linshare/
+              port: 8080
+            initialDelaySeconds: 91
+            periodSeconds: 30
+
+          {{- if eq .Values.linshare.backend.storage.mode "openstack-swift" }}
+          envFrom:
+          - secretRef:
+              name: swift-linshare-credentials
+          {{- end }}
+
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "{{ .Values.linshare.backend.profiles }}"
+            - name: SSO_IP_LIST_ENABLE
+              value: "{{ .Values.linshare.backend.ssoIpFilter }}"
+            - name: JAVA_XMX
+              value: "{{ .Values.linshare.backend.javaXmx }}"
+            - name: CLAMAV_HOST
+              value: "1"
+            - name: CLAMAV_PORT
+              value: "3310"
+            - name: MONGODB_DATA_REPLICA_SET
+              value: "mongodb:27017"
+            - name: MONGODB_SMALLFILES_REPLICA_SET
+              value: "mongodb:27017"
+            - name: MONGODB_PORT
+              value: ""
+            - name: POSTGRES_HOST
+              value: "postgresql"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: THUMBNAIL_ENABLE
+              value: "{{ .Values.linshare.thumbnail.enabled }}"
+            - name: THUMBNAIL_HOST
+              value: "linshare-thumbnail-server"
+
+            - name: SMTP_HOST
+              value: "{{ .Values.linshare.backend.smtp.host }}"
+            - name: SMTP_PORT
+              value: "25"
+            - name: SMTP_AUTH_ENABLE
+              value: {{ .Values.linshare.backend.smtp.enableAuth }}
+            - name: SMTP_START_TLS_ENABLE
+              value: {{ .Values.linshare.backend.smtp.enableTls }}
+            - name: SMTP_SSL_ENABLE
+              value: {{ .Values.linshare.backend.smtp.enableSsl }}
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-account-linshare
+                  key: smtp-username
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-account-linshare
+                  key: smtp-password
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-postgresql-account-linshare
+                  key: postgresql-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-postgresql-account-linshare
+                  key: postgresql-password
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-postgresql-account-linshare
+                  key: postgresql-database
+
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-mongodb-account-linshare
+                  key: mongodb-username
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-mongodb-account-linshare
+                  key: mongodb-password
+            - name: MONGODB_DATA_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-mongodb-account-linshare
+                  key: mongodb-database
+            - name: MONGODB_SMALLFILES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-mongodb-account-linshare
+                  key: mongodb-small-files-database
+
+            - name: START_DEBUG
+              value: "0"
+            - name: STORAGE_MODE
+              value: {{ .Values.linshare.backend.storage.mode }}
+            - name: STORAGE_FILESYSTEM_DIR
+              value: {{ .Values.linshare.backend.storage.directory }}
+          ports:
+            - containerPort: 8080
+          resources:
+            {{- toYaml .Values.linshare.backend.resources | nindent 12 }}
+          volumeMounts:
+            - name: backend-extra-properties
+              mountPath: /etc/linshare/linshare.extra.properties
+              subPath: linshare.extra.properties
+            - name: jwt-keys
+              mountPath: /etc/linshare/private
+              subPath: private
+            - name: jwt-keys
+              mountPath: /etc/linshare/public
+              subPath: public
+            - name: storage-filesystem
+              mountPath: /var/lib/linshare/filesystemstorage
+
+      {{- if .Values.dockerCredentials }}
+      imagePullSecrets:
+        - name: docker-registry-secret
+     {{- end }}
+
+{{- if and (.Values.linshare.backend.localCache.storageSize) (.Values.linshare.backend.localCache.storageClass) }}
+  volumeClaimTemplates:
+    - metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: {{ .Values.linshare.backend.localCache.storageClass }}
+        name: storage-filesystem
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.linshare.backend.localCache.storageSize }}
+{{- end }}

@@ -1,5 +1,4 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if .Values.demo.mongodbAsPod }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,4 +11,3 @@ spec:
       port: 27017
   selector:
     app: mongodb
-{{- end }}

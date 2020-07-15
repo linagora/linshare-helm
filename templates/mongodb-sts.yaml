@@ -18,17 +18,17 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: {{ .Values.mongodb.image }}
+          image: {{ .Values.demo.mongodb.image }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb
-                  key: mongodb-user
+                  name: db-mongodb-account-linshare
+                  key: mongodb-username
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb
+                  name: db-mongodb-account-linshare
                   key: mongodb-password
           ports:
             - containerPort: 27017
@@ -42,19 +42,21 @@ spec:
           volumeMounts:
             - name: mongodb-persistent-storage
               mountPath: /data/db
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-{{- if and (.Values.mongodb.storageSize) (.Values.mongodb.storageClass) }}
+      {{- end }}
+{{- if and (.Values.demo.mongodb.storageSize) (.Values.demo.mongodb.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.mongodb.storageClass }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.demo.mongodb.storageClass }}
         name: mongodb-persistent-storage
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ .Values.mongodb.storageSize }}
+            storage: {{ .Values.demo.mongodb.storageSize }}
 {{- end }}
 {{- end }}

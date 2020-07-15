@@ -1,4 +1,5 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.postgresqlAsPod }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -16,20 +17,20 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: {{ .Values.postgresql.image }}
+          image: {{ .Values.demo.postgresql.image }}
           env:
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgresql
-                  key: postgres-user
+                  name: db-postgresql-account-linshare
+                  key: postgresql-username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql
-                  key: postgres-password
+                  name: db-postgresql-account-linshare
+                  key: postgresql-password
           ports:
             - containerPort: 5432
           resources:
@@ -42,18 +43,21 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data/
               name: pg-data
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-{{- if and (.Values.postgresql.storageSize) (.Values.postgresql.storageClass) }}
+      {{- end }}
+{{- if and (.Values.demo.postgresql.storageSize) (.Values.demo.postgresql.storageClass) }}
   volumeClaimTemplates:
     - metadata:
         annotations:
-          volume.beta.kubernetes.io/storage-class: {{ .Values.postgresql.storageClass }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.demo.postgresql.storageClass }}
         name: pg-data
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ .Values.postgresql.storageSize }}
+            storage: {{ .Values.demo.postgresql.storageSize }}
+{{- end }}
 {{- end }}

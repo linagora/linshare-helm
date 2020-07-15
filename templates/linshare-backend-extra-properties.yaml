@@ -2,13 +2,11 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: backend-extra-properties
-  labels:
-    cm: backend-extra-properties
+  name: linshare-backend-extra-properties
 data:
   linshare.extra.properties: |
     jwt.global.key.private.path=/etc/linshare/private
     jwt.global.key.public.path=/etc/linshare/public
-    {{- range .Values.backend.extraProperties }}
+    {{- range .Values.linshare.backend.extraProperties }}
     {{ . }}
     {{- end }}

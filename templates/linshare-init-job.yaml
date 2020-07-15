@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init
+  name: linshare-init
 spec:
   activeDeadlineSeconds: 1800
   template:
@@ -18,7 +18,7 @@ spec:
             optional: true
       containers:
         - name: init
-          image: {{ .Values.init.image }}
+          image: {{ .Values.linshare.init.image }}
           volumeMounts:
             - name: extra-jwt-key
               mountPath: /linagora/data/
@@ -26,17 +26,17 @@ spec:
             - name: LS_DEBUG
               value: "0"
             - name: LS_SERVER_HOST
-              value: backend
+              value: linshare-backend
             - name: LS_SERVER_PORT
               value: "8080"
-           {{- if .Values.uiUser.externalUrl }}
+           {{- if .Values.linshare.uiUser.externalUrl }}
             - name: LS_USER_URL
-              value: "{{ .Values.uiUser.externalUrl }}"
+              value: "{{ .Values.linshare.uiUser.externalUrl }}"
             - name: LS_EXTERNAL_URL
-              value: "{{ .Values.uiUser.externalUrl }}"
+              value: "{{ .Values.linshare.uiUser.externalUrl }}"
            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
-              value: "{{ .Values.init.noReply }}"
+              value: "{{ .Values.linshare.init.noReply }}"
            {{- if .Values.demo.enabled }}
             - name: LS_LDAP_NAME
               value: "ldap-demo"
@@ -53,16 +53,18 @@ spec:
             - name: LS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: root-account
+                  name: linshare-root-account
                   key: root-password
             - name: LS_DOMAIN_PATTERN_NAME
               value: "pattern-demo"
             - name: LS_DOMAIN_PATTERN_MODEL
               value: "a4620dfc-dc46-11e8-a098-2355f9d6585a"
             - name: LS_JWT_PUB_KEY_NAME
-              value: "{{- .Values.init.extraJwtKeyName -}}"
+              value: "{{- .Values.linshare.init.extraJwtKeyName -}}"
             - name: LS_JWT_PUB_KEY
               value: "/linagora/data/public"
            {{- end }}
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
+      {{- end }}

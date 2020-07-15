@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thumbnail-server
+  name: linshare-thumbnail-server
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.linshare.thumbnail.replicaCount }}
   selector:
     matchLabels:
       app: linshare-thumbnail-server
@@ -15,14 +15,9 @@ spec:
     spec:
       containers:
         - name: thumbnail-server
-          image: {{ .Values.thumbnail.image }}
+          image: {{ .Values.linshare.thumbnail.image }}
           resources:
-            limits:
-              cpu: "500m"
-              memory: "500Mi"
-            requests:
-              cpu: "500m"
-              memory: "500Mi"
+            {{- toYaml .Values.linshare.thumbnail.resources | nindent 12 }}
           ports:
             - containerPort: 8080
             - containerPort: 8081
@@ -38,5 +33,7 @@ spec:
               port: 8081
             initialDelaySeconds: 20
             periodSeconds: 30
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
+      {{- end }}

@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: postgresql-endpoints
+  name: postgresql
 subsets:
   - addresses:
   {{- range $index, $ip := .Values.postgresql.ips }}

@@ -2,14 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ui-admin
+  name: linshare-backend
   labels:
-    svc: linshare-ui-admin
+    app: linshare-backend
 spec:
   ports:
-    - name: '80'
-      protocol: TCP
-      port: 80
-      targetPort: 80
+    - protocol: TCP
+      port: 8080
   selector:
-    app: linshare-ui-admin
+    app: linshare-backend

@@ -1,14 +1,84 @@
-# Default values for linshare.
+# LinShare parameters
+linshare:
 
-demo:
-  enabled: true
-  ldapAsPod: true
-  mailServerAsPod: true
-  mongodbAsPod: true
+  # General settings for Linshare's back-end
+  backend:
+    image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-backend:4.0.0"
 
-# enable deployment of ingresses.
+    # Memory management
+    javaXmx: 2048m
+    resources:
+      limits:
+        cpu: "4"
+        memory: "4Gi"
+      requests:
+        cpu: "2"
+        memory: "2Gi"
+
+    # Miscellaneous
+    profiles: default,jcloud,batches
+    ssoIpFilter: false
+    extraProperties: []
+    ldapHost: linshare-ldap
+
+    # Storage
+    storage:
+      # Store on a disk (filesystem) or in a bucket (openstack-swift)
+      mode: openstack-swift
+      # The directory where to store files, IF stored on a file system
+      directory: /var/lib/linshare/filesystemstorage
+      # Options for the bucket storage (Swift) are defined as a secret
+
+    # Local storage (seen as a volume in the POD, to store temporary files)
+    localCache:
+      storageSize: 20Gi
+      storageClass: cinder-high-speed
+
+    # SMTP
+    smtp:
+      host: linshare-demo-mail
+      enableAuth: false
+      enableSsl: false
+      enableTls: false
+
+  # Configuration for Linshare's administration
+  uiAdmin:
+    image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-admin:4.0.0"
+    externalUrl: null
+
+  # Configuration for LinShare's UI
+  uiUser:
+    image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-user:4.0.0"
+    externalUrl: null
+    replicaCount: 1
+
+  # LinShare's initialization
+  init:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.0.0"
+    noReply: no-reply@linshare.local
+    extraJwtKeyName: extraJwtKeyName
+
+  initDb:
+    image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
+
+  # Parameters related to the thumbnail server
+  thumbnail:
+    enabled: true
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.1.1"
+    externalUrl: null
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
+
+
+# Global ingresses
 ingress:
-  enabled: "false"
+  enabled: false
   hosts:
     - host: linshare-admin.local
       path: "/"
@@ -17,9 +87,8 @@ ingress:
       paths: "/"
       suffix: ui-user
 
-# enable deployment of traefik (v2) ingress routes
-ingressroutes:
-  enabled: "false"
+ingressRoutes:
+  enabled: false
   baseDomain: local
   certResolver: default
   hosts:
@@ -27,67 +96,43 @@ ingressroutes:
     user: linshare-user.local
     webmail: linshare-webmail.local
 
+
+# Database settings
 mongodb:
-  storageSize: 2Gi
-  storageClass: cinder-classic
-  image: "mongo:4.2"
-    # ips:
-  #   - "1.2.3.4"
-  #   - "1.2.3.5"
-  #   - "1.2.3.6"
-
+  ips:
+  - "1.2.3.4"
+  - "4.5.6.7"
+  
 postgresql:
-  storageSize: 1Gi
-  storageClass: cinder-classic
-  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
-  # ips:
-  #   - "1.2.3.4"
-  #   - "1.2.3.5"
-  #   - "1.2.3.6"
-
-backend:
-  storageSize: 20Gi
-  storageClass: cinder-classic
-  ssoIpFilter: false
-  profiles: default,jcloud,batches
-  # profiles: sso,jcloud,batches
-  thumbnail: true
-  ##looking for a configmap with some extra keys to add to linshare.properties
-  extraProperties: []
-  #smtp: 127.0.0.1
-  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-backend:4.0.0"
-  resources: 
-    limits:
-      cpu: "2"
-      memory: "2Gi"
-    requests:
-      cpu: "1"
-      memory: "1Gi"
+  ips:
+  - "1.2.3.4"
+  - "4.5.6.7"
 
 
-uiAdmin:
-  externalUrl: null
-  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-admin:4.0.0"
+# Additional parameters for demo purpose
+demo:
+  ldapAsPod: true
+  mailServerAsPod: true
+  mongodbAsPod: true
+  postgresqlAsPod: true
 
-init:
-  noReply: no-reply@linshare.local
-  extraJwtKeyName: extraJwtKeyName
-  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.5"
+  # DB settings
+  mongodb:
+    image: "mongo:4.2"
+    storageSize: 2Gi
+    storageClass: cinder-high-speed
 
-uiUser:
-  externalUrl: null
-  image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-user:4.0.0"
+  postgresql:
+    image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
+    storageSize: 1Gi
+    storageClass: cinder-high-speed
 
-thumbnail:
-  externalUrl: null
-  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.0.3"
+  # LDAP settings for demos
+  ldap:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
 
-# if you enable the demo mode, you may want to also deploy the ldap service too.
-ldap:
-  image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
-
-mail:
-  backend:
+  # Mail settings for demos
+  mail:
     image: "tvial/docker-mailserver:2.1"
-  frontend:
+  webmail:
     image: "robbertkl/roundcube"

@@ -3,9 +3,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mail
+  name: linshare-demo-mail
   labels:
-    svc: linshare-mail
+    app: linshare-demo-mail
 spec:
   ports:
     - name: '25'
@@ -17,5 +17,5 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: linshare-mail
+    app: linshare-demo-mail
 {{- end }}

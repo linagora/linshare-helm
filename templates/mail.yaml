@@ -3,27 +3,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mail
+  name: linshare-demo-mail
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: linshare-mail
+      app: linshare-demo-mail
   template:
     metadata:
       labels:
-        app: linshare-mail
+        app: linshare-demo-mail
     spec:
       volumes:
       - name: config
         configMap:
-          name: mail
+          name: linshare-demo-mail
       - name: config-web
         configMap:
-          name: webmail
+          name: linshare-demo-webmail
       containers:
         - name: webmail
-          image: {{ .Values.mail.frontend.image }}
+          image: {{ .Values.demo.webmail.image }}
           volumeMounts:
             - name: config-web
               mountPath: /var/www/config/config.inc.php
@@ -38,7 +38,7 @@ spec:
           ports:
             - containerPort: 80
         - name: mail
-          image: {{ .Values.mail.backend.image }}
+          image: {{ .Values.demo.mail.image }}
           volumeMounts:
             - name: config
               mountPath: /etc/postfix/main.cf
@@ -88,6 +88,8 @@ spec:
             requests:
               cpu: "500m"
               memory: "500Mi"
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
+      {{- end }}
 {{- end }}

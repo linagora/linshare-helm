@@ -2,29 +2,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ui-user
+  name: linshare-ui-admin
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: linshare-ui-user
+      app: linshare-ui-admin
   template:
     metadata:
       labels:
-        app: linshare-ui-user
+        app: linshare-ui-admin
     spec:
       containers:
-        - name: ui-user
-          image: {{ .Values.uiUser.image }}
+        - name: ui-admin
+          image: {{ .Values.linshare.uiAdmin.image }}
           env:
-          {{- if .Values.uiUser.externalUrl }}
+          {{- if .Values.linshare.uiAdmin.externalUrl }}
             - name: EXTERNAL_URL
-              value: {{ .Values.uiUser.externalUrl }}
+              value: {{ .Values.linshare.uiAdmin.externalUrl }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'
             - name: TOMCAT_URL
-              value: backend
+              value: linshare-backend
           ports:
             - containerPort: 80
           resources:
@@ -46,5 +46,7 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 30
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
+      {{- end }}

@@ -3,9 +3,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "ldap"
+  name: linshare-ldap
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: linshare-ldap
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: {{ .Values.ldap.image }}
+          image: {{ .Values.demo.ldap.image }}
           ports:
             - containerPort: 389
           resources:
@@ -26,6 +26,8 @@ spec:
             requests:
               cpu: "500m"
               memory: "1Gi"
+      {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
+      {{- end }}
 {{- end }}

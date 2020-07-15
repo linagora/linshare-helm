@@ -1,5 +1,5 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-{{- if eq .Values.ingressroutes.enabled "true"}}
+{{- if .Values.ingressRoutes.enabled }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -13,9 +13,9 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`{{ .Values.ingressroutes.baseDomain }}`)
+  - match: Host(`{{ .Values.ingressRoutes.baseDomain }}`)
     kind: Rule
-  - match: Host(`{{ .Values.ingressroutes.hosts.admin }}`)
+  - match: Host(`{{ .Values.ingressRoutes.hosts.admin }}`)
     kind: Rule
     services:
     - name: ui-admin
@@ -29,7 +29,7 @@ spec:
       responseForwarding:
         # (default 100ms) Interval between flushes of the buffered response body to the client.
         flushInterval: 100ms
-  - match: Host(`{{ .Values.ingressroutes.hosts.user }}`)
+  - match: Host(`{{ .Values.ingressRoutes.hosts.user }}`)
     kind: Rule
     priority: 12
     services:
@@ -39,7 +39,7 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
-  - match: Host(`{{ .Values.ingressroutes.hosts.webmail }}`)
+  - match: Host(`{{ .Values.ingressRoutes.hosts.webmail }}`)
     kind: Rule
     priority: 12
     services:
@@ -50,9 +50,9 @@ spec:
       responseForwarding:
         flushInterval: 100ms
   tls:
-    certResolver: {{ .Values.ingressroutes.certResolver }}
+    certResolver: {{ .Values.ingressRoutes.certResolver }}
     domains:
-      - main: {{ .Values.ingressroutes.baseDomain }}
+      - main: {{ .Values.ingressRoutes.baseDomain }}
         sans:
-          - "*.{{ .Values.ingressroutes.baseDomain }}"
+          - "*.{{ .Values.ingressRoutes.baseDomain }}"
 {{- end }}
