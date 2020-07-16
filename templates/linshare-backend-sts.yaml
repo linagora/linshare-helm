@@ -73,7 +73,7 @@ spec:
             - name: SMTP_HOST
               value: "{{ .Values.linshare.backend.smtp.host }}"
             - name: SMTP_PORT
-              value: "25"
+              value: "{{ .Values.linshare.backend.smtp.port }}"
             - name: SMTP_AUTH_ENABLE
               value: {{ .Values.linshare.backend.smtp.enableAuth }}
             - name: SMTP_START_TLS_ENABLE

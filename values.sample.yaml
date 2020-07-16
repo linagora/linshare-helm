@@ -37,6 +37,7 @@ linshare:
     # SMTP
     smtp:
       host: linshare-demo-mail
+      port: "25"
       enableAuth: false
       enableSsl: false
       enableTls: false
