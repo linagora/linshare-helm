@@ -76,7 +76,6 @@ linshare:
         cpu: "500m"
         memory: "500Mi"
 
-
 # Global ingresses
 ingress:
   enabled: false

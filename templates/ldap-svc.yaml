@@ -5,7 +5,7 @@ kind: Service
 metadata:
   name: linshare-ldap
   labels:
-    svc: linshare-ldap
+    app: linshare-ldap
 spec:
   ports:
     - name: '389'

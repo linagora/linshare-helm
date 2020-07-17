@@ -7,14 +7,11 @@ metadata:
 spec:
   template:
     metadata:
-      spec:
-        {{- if .Values.dockerCredentials }}
-        imagePullSecrets:
-        - name: docker-registry-secret
-        {{- end }}
-
-        restartPolicy: OnFailure
-        containers:
+      labels:
+        name: linshare-init-database
+    spec:
+      restartPolicy: OnFailure
+      containers:
         - name: linshare-init-database
           image: {{ .Values.linshare.initDb.image }}
           terminationMessagePolicy: FallbackToLogsOnError

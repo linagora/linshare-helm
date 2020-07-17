@@ -69,7 +69,6 @@ spec:
               value: "{{ .Values.linshare.thumbnail.enabled }}"
             - name: THUMBNAIL_HOST
               value: "linshare-thumbnail-server"
-
             - name: SMTP_HOST
               value: "{{ .Values.linshare.backend.smtp.host }}"
             - name: SMTP_PORT
@@ -90,7 +89,6 @@ spec:
                 secretKeyRef:
                   name: smtp-account-linshare
                   key: smtp-password
-
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -106,7 +104,6 @@ spec:
                 secretKeyRef:
                   name: db-postgresql-account-linshare
                   key: postgresql-database
-
             - name: MONGODB_USER
               valueFrom:
                 secretKeyRef:
@@ -127,7 +124,6 @@ spec:
                 secretKeyRef:
                   name: db-mongodb-account-linshare
                   key: mongodb-small-files-database
-
             - name: START_DEBUG
               value: "0"
             - name: STORAGE_MODE
@@ -150,12 +146,10 @@ spec:
               subPath: public
             - name: storage-filesystem
               mountPath: /var/lib/linshare/filesystemstorage
-
       {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
      {{- end }}
-
 {{- if and (.Values.linshare.backend.localCache.storageSize) (.Values.linshare.backend.localCache.storageClass) }}
   volumeClaimTemplates:
     - metadata:
