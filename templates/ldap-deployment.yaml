@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ldap
-          image: {{ .Values.linshare.ldap.image }}
+          image: {{ .Values.demo.ldap.image }}
           ports:
             - containerPort: 389
           resources:

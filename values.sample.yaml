@@ -75,11 +75,6 @@ linshare:
       requests:
         cpu: "500m"
         memory: "500Mi"
-<<<<<<< HEAD
-=======
-  ldap:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
->>>>>>> 2324d58... Fix selector for ldap and postgres svc
 
 # Global ingresses
 ingress:
