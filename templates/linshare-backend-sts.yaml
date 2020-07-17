@@ -37,13 +37,11 @@ spec:
               port: 8080
             initialDelaySeconds: 91
             periodSeconds: 30
-
           {{- if eq .Values.linshare.backend.storage.mode "openstack-swift" }}
           envFrom:
           - secretRef:
               name: swift-linshare-credentials
           {{- end }}
-
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "{{ .Values.linshare.backend.profiles }}"
@@ -74,11 +72,11 @@ spec:
             - name: SMTP_PORT
               value: "{{ .Values.linshare.backend.smtp.port }}"
             - name: SMTP_AUTH_ENABLE
-              value: {{ .Values.linshare.backend.smtp.enableAuth }}
+              value: "{{ .Values.linshare.backend.smtp.enableAuth }}"
             - name: SMTP_START_TLS_ENABLE
-              value: {{ .Values.linshare.backend.smtp.enableTls }}
+              value: "{{ .Values.linshare.backend.smtp.enableTls }}"
             - name: SMTP_SSL_ENABLE
-              value: {{ .Values.linshare.backend.smtp.enableSsl }}
+              value: "{{ .Values.linshare.backend.smtp.enableSsl }}"
             - name: SMTP_USER
               valueFrom:
                 secretKeyRef:
