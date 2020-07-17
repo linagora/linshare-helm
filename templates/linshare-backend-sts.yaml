@@ -62,7 +62,7 @@ spec:
             - name: POSTGRES_HOST
               value: "postgresql"
             - name: POSTGRES_PORT
-              value: "5432"
+              value: "{{ .Values.postgresql.port }}"
             - name: THUMBNAIL_ENABLE
               value: "{{ .Values.linshare.thumbnail.enabled }}"
             - name: THUMBNAIL_HOST

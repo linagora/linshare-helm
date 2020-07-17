@@ -11,5 +11,5 @@ subsets:
         ip: {{ $ip }}
   {{- end }}
     ports:
-      - port: 5433
+      - port: {{ .Values.postgresql.port }}
 {{- end -}}

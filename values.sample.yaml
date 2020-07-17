@@ -66,7 +66,6 @@ linshare:
   thumbnail:
     enabled: true
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.1.1"
-    externalUrl: null
     replicaCount: 1
     resources:
       limits:
@@ -104,6 +103,7 @@ mongodb:
   - "4.5.6.7"
   
 postgresql:
+  port: "5432"
   ips:
   - "1.2.3.4"
   - "4.5.6.7"

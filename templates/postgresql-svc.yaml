@@ -8,6 +8,6 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      port: 5432
+      port: {{ .Values.postgresql.port }}
   selector:
     app: postgresql
