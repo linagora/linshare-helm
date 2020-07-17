@@ -11,6 +11,10 @@ spec:
         name: linshare-init-database
     spec:
       restartPolicy: OnFailure
+      {{- if .Values.dockerCredentials }}
+      imagePullSecrets:
+        - name: docker-registry-secret
+      {{- end }}
       containers:
         - name: linshare-init-database
           image: {{ .Values.linshare.initDb.image }}
