@@ -45,11 +45,12 @@ linshare:
   # Configuration for Linshare's administration
   uiAdmin:
     image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-admin:4.0.0"
-    externalUrl: null
+    url: null
 
   # Configuration for LinShare's UI
   uiUser:
     image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-ui-user:4.0.0"
+    url: null
     externalUrl: null
     replicaCount: 1
 
@@ -58,6 +59,7 @@ linshare:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.0.0"
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
+    ldapbaseDn: "ou=People,dc=linshare,dc=org"
 
   initDb:
     image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"

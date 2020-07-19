@@ -11,17 +11,9 @@ spec:
         app: linshare-init
     spec:
       restartPolicy: OnFailure
-      volumes:
-        - name: extra-jwt-key
-          secret:
-            secretName: extra-jwt-key
-            optional: true
       containers:
         - name: init
           image: {{ .Values.linshare.init.image }}
-          volumeMounts:
-            - name: extra-jwt-key
-              mountPath: /linagora/data/
           env:
             - name: LS_DEBUG
               value: "0"
@@ -29,25 +21,30 @@ spec:
               value: linshare-backend
             - name: LS_SERVER_PORT
               value: "8080"
-           {{- if .Values.linshare.uiUser.externalUrl }}
             - name: LS_USER_URL
-              value: "{{ .Values.linshare.uiUser.externalUrl }}"
+              value: "{{ .Values.linshare.uiUser.url }}"
+            {{- if .Values.linshare.uiUser.externalUrl }}
             - name: LS_EXTERNAL_URL
               value: "{{ .Values.linshare.uiUser.externalUrl }}"
-           {{- end }}
+            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
               value: "{{ .Values.linshare.init.noReply }}"
-           {{- if .Values.demo.enabled }}
             - name: LS_LDAP_NAME
-              value: "ldap-demo"
+              value: "ldap"
             - name: LS_LDAP_URL
               value: "ldap://ldap:389"
             - name: LS_LDAP_BASE_DN
-              value: "ou=People,dc=linshare,dc=org"
+              value: "{{ .Values.linshare.init.ldapbaseDn }}"
             - name: LS_LDAP_DN
-              value: "cn=linshare,dc=linshare,dc=org"
+              valueFrom:
+                secretKeyRef:
+                  name: db-ldap-account-linshare
+                  key: ldap-username
             - name: LS_LDAP_PW
-              value: "linshare"
+              valueFrom:
+                secretKeyRef:
+                  name: db-ldap-account-linshare
+                  key: ldap-password
             - name: LS_DEFAULT_PASSWORD
               value: "adminlinshare"
             - name: LS_PASSWORD
@@ -59,11 +56,21 @@ spec:
               value: "pattern-demo"
             - name: LS_DOMAIN_PATTERN_MODEL
               value: "a4620dfc-dc46-11e8-a098-2355f9d6585a"
+
+      {{- if .Values.linshare.init.extraJwtKeyName }}
             - name: LS_JWT_PUB_KEY_NAME
               value: "{{- .Values.linshare.init.extraJwtKeyName -}}"
             - name: LS_JWT_PUB_KEY
               value: "/linagora/data/public"
-           {{- end }}
+          volumeMounts:
+            - name: extra-jwt-key
+              mountPath: /linagora/data/
+      volumes:
+        - name: extra-jwt-key
+          secret:
+            secretName: extra-jwt-key
+            optional: true
+      {{- end }}
       {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret

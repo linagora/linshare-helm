@@ -32,7 +32,7 @@ spec:
                   name: db-postgresql-account-linshare
                   key: postgresql-password
           ports:
-            - containerPort: 5432
+            - containerPort: "{{ .Values.postgresql.port }}"
           resources:
             limits:
               cpu: "700m"

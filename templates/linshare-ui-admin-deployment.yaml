@@ -17,9 +17,9 @@ spec:
         - name: ui-admin
           image: {{ .Values.linshare.uiAdmin.image }}
           env:
-          {{- if .Values.linshare.uiAdmin.externalUrl }}
+          {{- if .Values.linshare.uiAdmin.url }}
             - name: EXTERNAL_URL
-              value: {{ .Values.linshare.uiAdmin.externalUrl }}
+              value: {{ .Values.linshare.uiAdmin.url }}
           {{- end }}
             - name: TOMCAT_PORT
               value: '8080'
