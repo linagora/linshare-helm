@@ -11,6 +11,25 @@ spec:
         app: linshare-init
     spec:
       restartPolicy: OnFailure
+      volumes:
+        - name: extra-jwt-key
+          secret:
+            secretName: extra-jwt-key
+            optional: true
+      initContainers:
+      - name: wait-for-linshare
+        image: busybox:1.32
+        args:
+        - /bin/sh
+        - -c
+        - >
+          set -x;
+          while [ $(wget --spider -S "http://linshare-backend:8080/linshare" 2>&1 | grep "HTTP/" | awk '{print $2}' | head -1) -ne 302 ]; do
+            sleep 15;
+            echo "Waiting for Linshare ...";
+          done;
+          echo "Linshare is ready..";
+        imagePullPolicy: Always
       containers:
         - name: init
           image: {{ .Values.linshare.init.image }}
