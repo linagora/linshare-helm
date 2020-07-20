@@ -11,11 +11,6 @@ spec:
         app: linshare-init
     spec:
       restartPolicy: OnFailure
-      volumes:
-        - name: extra-jwt-key
-          secret:
-            secretName: extra-jwt-key
-            optional: true
       initContainers:
       - name: wait-for-linshare
         image: busybox:1.32
