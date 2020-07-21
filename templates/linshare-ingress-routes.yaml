@@ -13,12 +13,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`{{ .Values.ingressRoutes.baseDomain }}`)
-    kind: Rule
-  - match: Host(`{{ .Values.ingressRoutes.hosts.admin }}`)
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.admin }}}`)
     kind: Rule
     services:
-    - name: ui-admin
+    - name: linshare-ui-admin
       port: 80
       # (default 1) A weight used by the weighted round-robin strategy (WRR).
       weight: 1
@@ -29,30 +27,28 @@ spec:
       responseForwarding:
         # (default 100ms) Interval between flushes of the buffered response body to the client.
         flushInterval: 100ms
-  - match: Host(`{{ .Values.ingressRoutes.hosts.user }}`)
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.user }}}`)
     kind: Rule
     priority: 12
     services:
-    - name: ui-user
+    - name: linshare-ui-user
       port: 80
       weight: 1
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
-  - match: Host(`{{ .Values.ingressRoutes.hosts.webmail }}`)
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
     kind: Rule
     priority: 12
     services:
-    - name: mail
+    - name: linshare-mail
       port: 80
       weight: 1
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+{{- if .Values.ingressRoutes.tls }}
   tls:
-    certResolver: {{ .Values.ingressRoutes.certResolver }}
-    domains:
-      - main: {{ .Values.ingressRoutes.baseDomain }}
-        sans:
-          - "*.{{ .Values.ingressRoutes.baseDomain }}"
+    {{ toYaml .Values.ingressRoutes.tls }}
+{{- end -}}
 {{- end }}

@@ -88,15 +88,31 @@ ingress:
       paths: "/"
       suffix: ui-user
 
+# Using LE
 ingressRoutes:
-  enabled: false
-  baseDomain: local
-  certResolver: default
+  enabled: true
+  baseDomain: &baseDomain example.org
   hosts:
-    admin: linshare-admin.local
-    user: linshare-user.local
-    webmail: linshare-webmail.local
+    admin: linshare-admin.example.org
+    user: linshare-user.example.org
+    webmail: linshare-webmail.example.org
+  tls:
+    certResolver: resolvername
+    domains:
+      - main: *baseDomain
+        sans:
+          - "*.example.org"
 
+# Using provided cert
+ingressRoutes:
+  enabled: true
+  baseDomain: &baseDomain example.org
+  hosts:
+    admin: linshare-admin.example.org
+    user: linshare-user.example.org
+    webmail: linshare-webmail.example.org
+  tls:
+      secretName: example.org-cert-ddmmyyyy
 
 # Database settings
 mongodb:
