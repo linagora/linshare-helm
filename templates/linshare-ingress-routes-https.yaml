@@ -3,10 +3,10 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: linshare
+  name: linshare-https
   labels:
     helm.sh/chart: {{ .Chart.Version }}
-    ingressroute: linshare
+    ingressroute: linshare-https
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
