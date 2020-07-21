@@ -112,7 +112,7 @@ ingressRoutes:
     user: linshare-user.example.org
     webmail: linshare-webmail.example.org
   tls:
-      secretName: example.org-cert-ddmmyyyy
+    secretName: example.org-cert-ddmmyyyy
 
 # Database settings
 mongodb:
