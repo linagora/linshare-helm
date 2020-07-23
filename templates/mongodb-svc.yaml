@@ -9,5 +9,3 @@ spec:
   ports:
     - protocol: TCP
       port: 27017
-  selector:
-    app: mongodb
