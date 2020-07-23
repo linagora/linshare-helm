@@ -19,7 +19,7 @@ spec:
         - -c
         - >
           set -x;
-          while [ $(wget --spider -S "http://linshare-backend:8080/linshare" 2>&1 | grep "HTTP/" | awk '{print $2}' | head -1) -ne 302 ]; do
+          while [[ $(wget --spider -S "http://linshare-backend:8080/linshare" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -1) -ne 200 ]]; do
             sleep 15;
             echo "Waiting for Linshare ...";
           done;
