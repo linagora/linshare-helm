@@ -114,6 +114,10 @@ ingressRoutes:
   tls:
     secretName: example.org-cert-ddmmyyyy
 
+# Use Traefik 2 middlewares
+middlewares:
+  enabled: false
+
 # Database settings
 mongodb:
   ips:
