@@ -3,6 +3,11 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: https-only
+  labels:
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+  annotations:
+    meta.helm.sh/release-name: "{{ .Release.Name }}"
+    meta.helm.sh/release-namespace: "{{ .Release.Namespace }}"
 spec:
   redirectScheme:
     scheme: https
