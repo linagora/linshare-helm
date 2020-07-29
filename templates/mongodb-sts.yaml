@@ -4,6 +4,11 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
+  labels:
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version \| replace "+" "_" }}"
+    app.kubernetes.io/name: "{{- include "linshare.name" . }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   serviceName: mongodb
   replicas: 1
