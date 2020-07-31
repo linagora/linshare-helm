@@ -15,7 +15,7 @@ spec:
   routes:
   - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.admin }}}`)
     middlewares:
-        - name: https-only
+      - name: https-only
     kind: Rule
     services:
     - name: linshare-ui-admin
