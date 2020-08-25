@@ -8,6 +8,9 @@ metadata:
     app.kubernetes.io/name: "{{- include "linshare.name" . }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded, hook-failed
 spec:
   activeDeadlineSeconds: 1800
   template:
