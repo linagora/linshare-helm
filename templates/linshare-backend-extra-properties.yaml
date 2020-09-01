@@ -3,11 +3,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: linshare-backend-extra-properties
-  labels:
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version \| replace "+" "_" }}"
-    app.kubernetes.io/name: "{{- include "linshare.name" . }}"
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 data:
   linshare.extra.properties: |
     jwt.global.key.private.path=/etc/linshare/private

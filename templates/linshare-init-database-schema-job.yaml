@@ -4,11 +4,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: linshare-init-database
-  labels:
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version \| replace "+" "_" }}"
-    app.kubernetes.io/name: "{{- include "linshare.name" . }}"
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   template:
     metadata:

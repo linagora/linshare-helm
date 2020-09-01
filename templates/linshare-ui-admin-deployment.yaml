@@ -3,11 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: linshare-ui-admin
-  labels:
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version \| replace "+" "_" }}"
-    app.kubernetes.io/name: "{{- include "linshare.name" . }}"
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   replicas: 1
   selector:

@@ -5,11 +5,8 @@ kind: IngressRoute
 metadata:
   name: linshare-http
   labels:
+    helm.sh/chart: {{ .Chart.Version }}
     ingressroute: linshare-http
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version \| replace "+" "_" }}"
-    app.kubernetes.io/name: "{{- include "linshare.name" . }}"
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
