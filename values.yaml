@@ -1,0 +1,238 @@
+# LinShare parameters
+dockerCredentials: true
+linshare:
+
+  # General settings for Linshare's back-end
+  backend:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:4.0.0"
+
+    # Memory management
+    javaXmx: 2048m
+    resources:
+      limits:
+        cpu: "4"
+        memory: "4Gi"
+      requests:
+        cpu: "2"
+        memory: "2Gi"
+
+    # Miscellaneous
+    profiles: default,jcloud,batches
+    ssoIpFilter: false
+    extraProperties: []
+    ldapHost: linshare-ldap
+
+    # Storage
+    storage:
+      # Store on a disk (filesystem) or in a bucket (openstack-swift)
+      mode: openstack-swift
+      # The directory where to store files, IF stored on a file system
+      directory: /var/lib/linshare/filesystemstorage
+      # Options for the bucket storage (Swift) are defined as a secret
+      swift:
+        bucketName: linshare
+        authUrl: https://auth.cloud.ovh.net/v3/
+        projectId: <tenant-id>
+        projectName: <tenant-name>
+        # ex: projectName: "0000000000000000"
+        userDomainName: Default
+        username: null
+        password: null
+        regionName: GRA
+        interface: public
+        identityApiVersion: "3"
+
+    secret:
+      jwtKey: null
+    # Local storage (seen as a volume in the POD, to store temporary files)
+    localCache:
+      storageSize: 20Gi
+      storageClass: cinder-high-speed
+
+    # SMTP
+    smtp:
+      host: linshare-demo-mail
+      port: "25"
+      enableAuth: false
+      enableSsl: false
+      enableTls: false
+      secret:
+        username: change-me
+        password: change-me
+
+  # Configuration for Linshare's administration
+  uiAdmin:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:4.0.0"
+    url: https://admin.linshare.local
+
+  # Configuration for LinShare's UI
+  uiUser:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:4.0.0"
+    url: https://user.linshare.local
+    externalUrl: null
+    replicaCount: 1
+
+  # LinShare's initialization
+  init:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.0.0"
+    noReply: no-reply@linshare.local
+    extraJwtKeyName: extraJwtKeyName
+    ldapbaseDn: "ou=People,dc=linshare,dc=org"
+    domainPattern:
+      name: OpenLDAP-Pattern
+      model: 868400c0-c12e-456a-8c3c-19e985290586
+    secret:
+      # LinShare's root username is "root@localhost.localdomain"
+      linshareRootPassword: adminlinshare
+      ldapUsername: linshare
+      ldapPassword: linshare
+
+  initDb:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
+
+  # Parameters related to the thumbnail server
+  thumbnail:
+    enabled: true
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.1.1"
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
+
+# Global ingresses
+ingress:
+  enabled: false
+  hosts:
+    - host: admin.linshare.local
+      path: "/"
+      suffix: ui-admin
+    - host: user.linshare.local
+      paths: "/"
+      suffix: ui-user
+
+# Using LE
+ingressRoutes:
+  enabled: false
+  baseDomain: linshare.local
+  hosts:
+    admin: admin.linshare.local
+    user: user.linshare.local
+    webmail: webmail.linshare.local
+  tls:
+    certResolver: resolvername
+    domains:
+    - main: linshare.local
+      sans:
+      - '*.linshare.local'
+
+# Use Traefik 2 middlewares
+middlewares:
+  enabled: false
+
+# Database settings
+mongodb:
+  ips: []
+# - "1.2.3.4"
+# - "4.5.6.7"
+  secret:
+    username: linshare
+    password: linshare
+    dbName: linshare
+    dbNameForSmallFiles: linshare-files
+  
+postgresql:
+  port: "5432"
+  ips: []
+# - "1.2.3.4"
+# - "4.5.6.7"
+  secret:
+    username: linshare
+    password: linshare
+    dbName: linshare
+
+
+# Additional parameters for demo purpose
+demo:
+  ldapAsPod: true
+  mailServerAsPod: true
+  mongodbAsPod: true
+  postgresqlAsPod: true
+
+  # DB settings
+  mongodb:
+    image: "mongo:4.2"
+    storageSize: 2Gi
+    storageClass: cinder-high-speed
+
+  postgresql:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
+    storageSize: 1Gi
+    storageClass: cinder-high-speed
+
+  # LDAP settings for demos
+  ldap:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
+
+  # Mail settings for demos
+  mail:
+    image: "tvial/docker-mailserver:2.1"
+  webmail:
+    image: "robbertkl/roundcube"
+
+
+# If you want to store secrets into a different file,
+# you can create a file named secrets.yaml containing
+# the following and sensitive keys:
+#
+# postgresql:
+#   secret:
+#     username: change-me
+#     password: change-me
+#     dbName: change-me
+# 
+# mongodb:
+#   secret:
+#     username: change-me
+#     password: change-me
+#     dbName: change-me
+#     dbNameForSmallFiles: change-me
+# 
+# linshare:
+#   init:
+#     secret:
+#       # LinShare's root username is "root@localhost.localdomain"
+#       linshareRootPassword: change-me
+#       ldapUsername: change-me
+#       ldapPassword: change-me
+# 
+#   backend:
+#     smtp:
+#       secret:
+#         username: change-me
+#         password: change-me
+# 
+#     storage:
+#       swift:
+#         bucketName: change-me
+#         authUrl: https://auth.cloud.ovh.net/v3/
+#         projectId: change-me
+#         projectName: change-me
+#         userDomainName: Default
+#         username: change-me
+#         password: change-me
+#         regionName: GRA
+#         interface: public
+#         identityApiVersion: "3"
+# 
+#     secret:
+#       jwtKey: |-
+#         -----BEGIN PRIVATE KEY-----
+#         change-me
+#         -----END PRIVATE KEY-----
+#         -----BEGIN PUBLIC KEY-----
+#         change-me
+#         -----END PUBLIC KEY-----
