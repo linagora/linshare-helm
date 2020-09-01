@@ -147,7 +147,7 @@ spec:
       {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret
-     {{- end }}
+      {{- end }}
 {{- if and (.Values.linshare.backend.localCache.storageSize) (.Values.linshare.backend.localCache.storageClass) }}
   volumeClaimTemplates:
     - metadata:
