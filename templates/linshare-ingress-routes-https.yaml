@@ -49,6 +49,6 @@ spec:
         flushInterval: 100ms
 {{- if .Values.ingressRoutes.tls }}
   tls:
-    {{ toYaml .Values.ingressRoutes.tls }}
+    {{- toYaml .Values.ingressRoutes.tls | nindent 4 }}
 {{- end -}}
 {{- end }}
