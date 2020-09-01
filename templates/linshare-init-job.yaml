@@ -70,10 +70,9 @@ spec:
                   name: linshare-root-account
                   key: root-password
             - name: LS_DOMAIN_PATTERN_NAME
-              value: "OpenLDAP-Pattern"
+              value: "{{- .Values.linshare.init.domainPattern.name -}}"
             - name: LS_DOMAIN_PATTERN_MODEL
-              value: "868400c0-c12e-456a-8c3c-19e985290586"
-
+              value: "{{- .Values.linshare.init.domainPattern.model -}}"
       {{- if .Values.linshare.init.extraJwtKeyName }}
             - name: LS_JWT_PUB_KEY_NAME
               value: "{{- .Values.linshare.init.extraJwtKeyName -}}"

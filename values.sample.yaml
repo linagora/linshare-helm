@@ -61,6 +61,9 @@ linshare:
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
     ldapbaseDn: "ou=People,dc=linshare,dc=org"
+    domainPattern:
+      name: OpenLDAP-Pattern
+      model: 868400c0-c12e-456a-8c3c-19e985290586
 
   initDb:
     image: "docker-registry.linagora.com:5000/linshare-snapshots/linshare-database:4.0.0"
