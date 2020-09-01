@@ -124,15 +124,15 @@ middlewares:
 
 # Database settings
 mongodb:
-  ips:
-  - "1.2.3.4"
-  - "4.5.6.7"
+  ips: []
+# - "1.2.3.4"
+# - "4.5.6.7"
   
 postgresql:
   port: "5432"
-  ips:
-  - "1.2.3.4"
-  - "4.5.6.7"
+  ips: []
+# - "1.2.3.4"
+# - "4.5.6.7"
 
 
 # Additional parameters for demo purpose

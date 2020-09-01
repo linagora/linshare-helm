@@ -9,3 +9,7 @@ spec:
   ports:
     - protocol: TCP
       port: 27017
+{{- if not .Values.postgresql.ips }}
+  selector:
+    app: mongodb
+{{- end -}}
