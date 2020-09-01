@@ -1,4 +1,5 @@
 # LinShare parameters
+dockerCredentials: true
 linshare:
 
   # General settings for Linshare's back-end
