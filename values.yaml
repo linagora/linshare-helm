@@ -44,6 +44,13 @@ linshare:
 
     secret:
       jwtKey: null
+      # jwtKey: |-
+      #   -----BEGIN PRIVATE KEY-----
+      #   change-me
+      #   -----END PRIVATE KEY-----
+      #   -----BEGIN PUBLIC KEY-----
+      #   change-me
+      #   -----END PUBLIC KEY-----
     # Local storage (seen as a volume in the POD, to store temporary files)
     localCache:
       storageSize: 20Gi
@@ -81,8 +88,10 @@ linshare:
     ldap-username: "cn=linshare,dc=linshare,dc=org"
     ldap-password: linshare
     domainPattern:
-      name: OpenLDAP-Pattern
-      model: 868400c0-c12e-456a-8c3c-19e985290586
+      name: pattern-demo
+      model: a4620dfc-dc46-11e8-a098-2355f9d6585a
+      # name: OpenLDAP-Pattern
+      # model: 868400c0-c12e-456a-8c3c-19e985290586
     secret:
       # LinShare's root username is "root@localhost.localdomain"
       linshareRootPassword: adminlinshare
