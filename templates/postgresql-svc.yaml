@@ -5,6 +5,7 @@ metadata:
   name: postgresql
   labels:
     app: postgresql
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   ports:
     - protocol: TCP
@@ -12,4 +13,5 @@ spec:
 {{- if not .Values.postgresql.ips }}
   selector:
     app: postgresql
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
 {{- end -}}

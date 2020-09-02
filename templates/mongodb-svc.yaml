@@ -5,6 +5,7 @@ metadata:
   name: mongodb
   labels:
     app: mongodb
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   ports:
     - protocol: TCP
@@ -12,4 +13,5 @@ spec:
 {{- if not .Values.postgresql.ips }}
   selector:
     app: mongodb
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
 {{- end -}}

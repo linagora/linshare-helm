@@ -5,6 +5,7 @@ metadata:
   name: linshare-ui-admin
   labels:
     app: linshare-ui-admin
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   ports:
     - name: '80'
@@ -13,3 +14,4 @@ spec:
       targetPort: 80
   selector:
     app: linshare-ui-admin
+    {{- include "linshare.selectorLabels" . | nindent 4 }}

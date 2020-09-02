@@ -5,9 +5,11 @@ metadata:
   name: linshare-backend
   labels:
     app: linshare-backend
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   ports:
     - protocol: TCP
       port: 8080
   selector:
     app: linshare-backend
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
