@@ -78,6 +78,8 @@ linshare:
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
     ldapbaseDn: "ou=People,dc=linshare,dc=org"
+    ldap-username: "cn=linshare,dc=linshare,dc=org"
+    ldap-password: linshare
     domainPattern:
       name: OpenLDAP-Pattern
       model: 868400c0-c12e-456a-8c3c-19e985290586
