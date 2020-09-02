@@ -3,16 +3,20 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: linshare-backend
+  labels:
+    {{- include "linshare.labels" . | nindent 4 }}
 spec:
   serviceName: linshare-backend
   replicas: 1
   selector:
     matchLabels:
       app: linshare-backend
+      {{- include "linshare.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: linshare-backend
+        {{- include "linshare.selectorLabels" . | nindent 8 }}
     spec:
       volumes:
       - name: backend-extra-properties
