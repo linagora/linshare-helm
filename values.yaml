@@ -79,6 +79,11 @@ linshare:
     externalUrl: null
     replicaCount: 1
 
+  uiUploadRequest:
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
+    url: https://upload-request.linshare.local
+    replicaCount: 1
+
   # LinShare's initialization
   init:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.0.0"
@@ -124,6 +129,9 @@ ingress:
     - host: user.linshare.local
       paths: "/"
       suffix: ui-user
+    - host: upload-request.linshare.local
+      paths: "/"
+      suffix: ui-upload-request
 
 # Using LE
 ingressRoutes:
@@ -133,6 +141,7 @@ ingressRoutes:
     admin: admin.linshare.local
     user: user.linshare.local
     webmail: webmail.linshare.local
+    uploadRequest: upload-request.linshare.local
   tls:
     certResolver: resolvername
     domains:

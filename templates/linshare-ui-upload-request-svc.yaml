@@ -1,0 +1,17 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+apiVersion: v1
+kind: Service
+metadata:
+  name: linshare-ui-upload-request
+  labels:
+    app: linshare-ui-upload-request
+    {{- include "linshare.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: '80'
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: linshare-ui-upload-request
+    {{- include "linshare.selectorLabels" . | nindent 4 }}

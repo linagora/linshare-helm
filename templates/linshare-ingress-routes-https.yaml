@@ -37,6 +37,16 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.uploadRequest }}}`)
+    kind: Rule
+    priority: 12
+    services:
+    - name: linshare-ui-upload-request
+      port: 80
+      weight: 1
+      passHostHeader: true
+      responseForwarding:
+        flushInterval: 100ms
   - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
     kind: Rule
     priority: 12
