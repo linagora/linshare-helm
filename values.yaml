@@ -100,7 +100,7 @@ linshare:
     secret:
       # LinShare's root username is "root@localhost.localdomain"
       linshareRootPassword: adminlinshare
-      ldapUsername: linshare
+      ldapUsername: cn=linshare,dc=linshare,dc=org
       ldapPassword: linshare
 
   initDb:
