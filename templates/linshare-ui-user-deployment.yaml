@@ -5,6 +5,10 @@ metadata:
   name: linshare-ui-user
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
+  {{- if .Values.linshare.uiUser.annotations }}
+  annotations:
+{{ toYaml .Values.linshare.uiUser.annotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.linshare.uiUser.replicaCount }}
   selector:

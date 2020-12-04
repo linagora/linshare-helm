@@ -78,6 +78,10 @@ linshare:
     url: https://user.linshare.local
     externalUrl: null
     replicaCount: 1
+    annotations:
+      keel.sh/policy: patch
+    # keel.sh/policy: force
+    # keel.sh/match-tag: "true"
 
   uiUploadRequest:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
