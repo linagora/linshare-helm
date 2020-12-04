@@ -5,6 +5,10 @@ metadata:
   name: linshare-ui-upload-request
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
+  {{- if .Values.linshare.uiUploadRequest.annotations }}
+  annotations:
+{{ toYaml .Values.linshare.uiUploadRequest.annotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.linshare.uiUploadRequest.replicaCount }}
   selector:

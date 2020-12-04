@@ -66,11 +66,19 @@ linshare:
       secret:
         username: change-me
         password: change-me
+    annotations:
+      keel.sh/policy: patch
+    # keel.sh/policy: force
+    # keel.sh/match-tag: "true"
 
   # Configuration for Linshare's administration
   uiAdmin:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:4.0.0"
     url: https://admin.linshare.local
+    annotations:
+      keel.sh/policy: patch
+    # keel.sh/policy: force
+    # keel.sh/match-tag: "true"
 
   # Configuration for LinShare's UI
   uiUser:
@@ -87,6 +95,10 @@ linshare:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
     url: https://upload-request.linshare.local
     replicaCount: 1
+    annotations:
+      keel.sh/policy: patch
+    # keel.sh/policy: force
+    # keel.sh/match-tag: "true"
 
   # LinShare's initialization
   init:

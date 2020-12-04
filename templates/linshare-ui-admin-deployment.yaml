@@ -5,6 +5,10 @@ metadata:
   name: linshare-ui-admin
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
+  {{- if .Values.linshare.uiAdmin.annotations }}
+  annotations:
+{{ toYaml .Values.linshare.uiAdmin.annotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:

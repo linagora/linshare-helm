@@ -5,6 +5,10 @@ metadata:
   name: linshare-backend
   labels:
     {{- include "linshare.labels" . | nindent 4 }}
+  {{- if .Values.linshare.backend.annotations }}
+  annotations:
+{{ toYaml .Values.linshare.backend.annotations | indent 4 }}
+  {{- end }}
 spec:
   serviceName: linshare-backend
   replicas: 1
