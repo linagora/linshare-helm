@@ -28,7 +28,7 @@ spec:
           name: linshare-backend-extra-properties
       - name: jwt-keys
         secret:
-          secretName: linshare-jwt-keys
+          secretName: "{{ .Values.linshare.backend.secret.jwtKeyName }}"
           optional: true
       containers:
         - name: backend

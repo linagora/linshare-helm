@@ -43,14 +43,7 @@ linshare:
         identityApiVersion: "3"
 
     secret:
-      jwtKey: null
-      # jwtKey: |-
-      #   -----BEGIN PRIVATE KEY-----
-      #   change-me
-      #   -----END PRIVATE KEY-----
-      #   -----BEGIN PUBLIC KEY-----
-      #   change-me
-      #   -----END PUBLIC KEY-----
+      jwtKeyName: linshare-jwt-keys
     # Local storage (seen as a volume in the POD, to store temporary files)
     localCache:
       storageSize: 20Gi
