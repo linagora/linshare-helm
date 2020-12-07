@@ -84,14 +84,6 @@ linshare:
     # keel.sh/policy: force
     # keel.sh/match-tag: "true"
 
-  uiUploadRequest:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
-    url: https://upload-request.linshare.local
-    replicaCount: 1
-    annotations:
-      keel.sh/policy: patch
-    # keel.sh/policy: force
-    # keel.sh/match-tag: "true"
 
   # LinShare's initialization
   init:
@@ -138,9 +130,6 @@ ingress:
     - host: user.linshare.local
       paths: "/"
       suffix: ui-user
-    - host: upload-request.linshare.local
-      paths: "/"
-      suffix: ui-upload-request
 
 # Using LE
 ingressRoutes:
@@ -150,7 +139,6 @@ ingressRoutes:
     admin: admin.linshare.local
     user: user.linshare.local
     webmail: webmail.linshare.local
-    uploadRequest: upload-request.linshare.local
   tls:
     certResolver: resolvername
     domains:
