@@ -3,30 +3,16 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: linshare-https
+  name: linshare-user-https
   labels:
     helm.sh/chart: {{ .Chart.Version }}
-    ingressroute: linshare-https
+    ingressroute: linshare-user-https
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.admin }}}`)
-    kind: Rule
-    services:
-    - name: linshare-ui-admin
-      port: 80
-      # (default 1) A weight used by the weighted round-robin strategy (WRR).
-      weight: 1
-      # (default true) PassHostHeader controls whether to leave the request's Host
-      # Header as it was before it reached the proxy, or whether to let the proxy set it
-      # to the destination (backend) host.
-      passHostHeader: true
-      responseForwarding:
-        # (default 100ms) Interval between flushes of the buffered response body to the client.
-        flushInterval: 100ms
   - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.user }}}`)
     kind: Rule
     priority: 12
@@ -47,8 +33,40 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
-{{- if .Values.ingressRoutes.tls }}
+{{- if .Values.ingressRoutes.userTls }}
   tls:
-    {{- toYaml .Values.ingressRoutes.tls | nindent 4 }}
+    {{- toYaml .Values.ingressRoutes.userTls | nindent 4 }}
+{{- end -}}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: linshare-admin-https
+  labels:
+    helm.sh/chart: {{ .Chart.Version }}
+    ingressroute: linshare-admin-https
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.admin }}}`)
+    kind: Rule
+    services:
+    - name: linshare-ui-admin
+      port: 80
+      # (default 1) A weight used by the weighted round-robin strategy (WRR).
+      weight: 1
+      # (default true) PassHostHeader controls whether to leave the request's Host
+      # Header as it was before it reached the proxy, or whether to let the proxy set it
+      # to the destination (backend) host.
+      passHostHeader: true
+      responseForwarding:
+        # (default 100ms) Interval between flushes of the buffered response body to the client.
+        flushInterval: 100ms
+{{- if .Values.ingressRoutes.adminTls }}
+  tls:
+    {{- toYaml .Values.ingressRoutes.adminTls | nindent 4 }}
 {{- end -}}
 {{- end }}

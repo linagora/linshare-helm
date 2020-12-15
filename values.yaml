@@ -139,7 +139,14 @@ ingressRoutes:
     admin: admin.linshare.local
     user: user.linshare.local
     webmail: webmail.linshare.local
-  tls:
+    uploadRequest: upload-request.linshare.local
+  userTls:
+    certResolver: resolvername
+    domains:
+    - main: linshare.local
+      sans:
+      - '*.linshare.local'
+  adminTls:
     certResolver: resolvername
     domains:
     - main: linshare.local
