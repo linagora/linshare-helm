@@ -33,10 +33,10 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
-{{- if .Values.ingressRoutes.userTls }}
+{{ if .Values.ingressRoutes.userTls }}
   tls:
     {{- toYaml .Values.ingressRoutes.userTls | nindent 4 }}
-{{- end -}}
+{{- end }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -65,8 +65,8 @@ spec:
       responseForwarding:
         # (default 100ms) Interval between flushes of the buffered response body to the client.
         flushInterval: 100ms
-{{- if .Values.ingressRoutes.adminTls }}
+{{ if .Values.ingressRoutes.adminTls }}
   tls:
     {{- toYaml .Values.ingressRoutes.adminTls | nindent 4 }}
-{{- end -}}
+{{- end }}
 {{- end }}
