@@ -3,48 +3,10 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: linshare-user-https
+  name: linshare-https
   labels:
     helm.sh/chart: {{ .Chart.Version }}
-    ingressroute: linshare-user-https
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.user }}}`)
-    kind: Rule
-    priority: 12
-    services:
-    - name: linshare-ui-user
-      port: 80
-      weight: 1
-      passHostHeader: true
-      responseForwarding:
-        flushInterval: 100ms
-  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
-    kind: Rule
-    priority: 12
-    services:
-    - name: linshare-demo-mail
-      port: 80
-      weight: 1
-      passHostHeader: true
-      responseForwarding:
-        flushInterval: 100ms
-{{ if .Values.ingressRoutes.userTls }}
-  tls:
-    {{- toYaml .Values.ingressRoutes.userTls | nindent 4 }}
-{{- end }}
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: linshare-admin-https
-  labels:
-    helm.sh/chart: {{ .Chart.Version }}
-    ingressroute: linshare-admin-https
+    ingressroute: linshare-https
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
@@ -65,8 +27,30 @@ spec:
       responseForwarding:
         # (default 100ms) Interval between flushes of the buffered response body to the client.
         flushInterval: 100ms
-{{ if .Values.ingressRoutes.adminTls }}
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.user }}}`)
+    kind: Rule
+    priority: 12
+    services:
+    - name: linshare-ui-user
+      port: 80
+      weight: 1
+      passHostHeader: true
+      responseForwarding:
+        flushInterval: 100ms
+  {{- if .Values.demo.mailServerAsPod }}
+  - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
+    kind: Rule
+    priority: 12
+    services:
+    - name: linshare-demo-mail
+      port: 80
+      weight: 1
+      passHostHeader: true
+      responseForwarding:
+        flushInterval: 100ms
+  {{- end }}
+{{- if .Values.ingressRoutes.tls }}
   tls:
-    {{- toYaml .Values.ingressRoutes.adminTls | nindent 4 }}
-{{- end }}
+    {{- toYaml .Values.ingressRoutes.tls | nindent 4 }}
+{{- end -}}
 {{- end }}

@@ -41,6 +41,7 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+  {{- if .Values.demo.mailServerAsPod }}
   - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
     middlewares:
       - name: https-only
@@ -53,4 +54,5 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+  {{- end }}
 {{- end }}
