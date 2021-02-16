@@ -21,6 +21,17 @@ spec:
         app: linshare-ui-user
         {{- include "linshare.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+      {{- if .Values.linshare.uiUser.jsConfigMapName }}
+        - name: linshare-ui-user-js-config
+          configMap:
+            name: {{ .Values.linshare.uiUser.jsConfigMapName }}
+      {{- end }}
+      {{- if .Values.linshare.uiUser.resourcesConfigMapName }}
+        - name: linshare-ui-user-resources
+          configMap:
+            name: {{ .Values.linshare.uiUser.resourcesConfigMapName }}
+      {{- end }}
       containers:
         - name: ui-user
           image: {{ .Values.linshare.uiUser.image }}
@@ -35,6 +46,16 @@ spec:
               value: linshare-backend
           ports:
             - containerPort: 80
+          volumeMounts:
+            {{- if .Values.linshare.uiUser.jsConfigMapName }}
+            - name: linshare-ui-user-js-config
+              mountPath: /usr/local/apache2/htdocs/linshare-ui-user/config/config.js
+              subPath: linshare.ui-user.config.js
+            {{- end }}
+            {{- if .Values.linshare.uiUser.resourcesConfigMapName }}
+            - name: linshare-ui-user-resources
+              mountPath: /usr/local/apache2/htdocs/linshare-ui-user/custom-resources
+            {{- end }}
           resources:
             limits:
               cpu: "500m"
