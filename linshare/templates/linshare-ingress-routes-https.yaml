@@ -47,6 +47,7 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+  {{- if .Values.demo.mailServerAsPod }}
   - match: HostRegexp(`{host:(www.)?{{ .Values.ingressRoutes.hosts.webmail }}}`)
     kind: Rule
     priority: 12
@@ -57,6 +58,7 @@ spec:
       passHostHeader: true
       responseForwarding:
         flushInterval: 100ms
+  {{- end }}
 {{- if .Values.ingressRoutes.tls }}
   tls:
     {{- toYaml .Values.ingressRoutes.tls | nindent 4 }}
