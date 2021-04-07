@@ -38,12 +38,7 @@ spec:
           ports:
             - containerPort: {{ .Values.postgresql.port }}
           resources:
-            limits:
-              cpu: "700m"
-              memory: "2Gi"
-            requests:
-              cpu: "500m"
-              memory: "1Gi"
+            {{- toYaml .Values.demo.postgresql.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data/
               name: pg-data

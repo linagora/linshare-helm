@@ -57,12 +57,7 @@ spec:
               mountPath: /usr/local/apache2/htdocs/linshare-ui-user/custom-resources
             {{- end }}
           resources:
-            limits:
-              cpu: "500m"
-              memory: "500Mi"
-            requests:
-              cpu: "500m"
-              memory: "500Mi"
+            {{- toYaml .Values.linshare.uiUser.resources | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /index.html

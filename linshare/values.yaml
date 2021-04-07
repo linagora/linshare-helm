@@ -68,6 +68,13 @@ linshare:
   uiAdmin:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:4.0.0"
     url: https://admin.linshare.local
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
     annotations:
       keel.sh/policy: patch
     # keel.sh/policy: force
@@ -83,6 +90,13 @@ linshare:
     # Config map with additional resources (e.g. logos)
     resourcesConfigMapName: null
     replicaCount: 1
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
     annotations:
       keel.sh/policy: patch
     # keel.sh/policy: force
@@ -92,6 +106,13 @@ linshare:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
     url: https://upload-request.linshare.local
     replicaCount: 1
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
     annotations:
       keel.sh/policy: patch
     # keel.sh/policy: force
@@ -200,15 +221,36 @@ demo:
     image: "mongo:4.2"
     storageSize: 2Gi
     storageClass: cinder-high-speed
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2G"
+      requests:
+        cpu: "500m"
+        memory: "1G"
 
   postgresql:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
     storageSize: 1Gi
     storageClass: cinder-high-speed
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2G"
+      requests:
+        cpu: "500m"
+        memory: "1G"
 
   # LDAP settings for demos
   ldap:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
 
   # Mail settings for demos
   mail:

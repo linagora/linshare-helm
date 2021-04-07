@@ -24,12 +24,7 @@ spec:
           ports:
             - containerPort: 389
           resources:
-            limits:
-              cpu: "700m"
-              memory: "2Gi"
-            requests:
-              cpu: "500m"
-              memory: "1Gi"
+            {{- toYaml .Values.demo.ldap.resources | nindent 12 }}
       {{- if .Values.dockerCredentials }}
       imagePullSecrets:
         - name: docker-registry-secret

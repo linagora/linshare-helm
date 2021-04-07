@@ -36,12 +36,7 @@ spec:
           ports:
             - containerPort: 80
           resources:
-            limits:
-              cpu: "500m"
-              memory: "500Mi"
-            requests:
-              cpu: "500m"
-              memory: "500Mi"
+            {{- toYaml .Values.linshare.uiAdmin.resources | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /index.html
