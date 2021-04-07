@@ -133,8 +133,13 @@ linshare:
       # name: OpenLDAP-Pattern
       # model: 868400c0-c12e-456a-8c3c-19e985290586
     secret:
-      # LinShare's root username is "root@localhost.localdomain"
-      linshareRootPassword: adminlinshare
+      # LinShare's root username is "root@localhost.localdomain".
+      # The LinShare's root password should contain:
+      # - At least one lower-case letter.
+      # - At least one upper-case letter.
+      # - At least one digit.
+      # - At least one special character.
+      linshareRootPassword: admin2Linshare!
       ldapUsername: cn=linshare,dc=linshare,dc=org
       ldapPassword: linshare
 
