@@ -47,7 +47,7 @@ linshare:
     # Local storage (seen as a volume in the POD, to store temporary files)
     localCache:
       storageSize: 20Gi
-      storageClass: cinder-high-speed
+      storageClass: csi-cinder-high-speed
 
     # SMTP
     smtp:
@@ -220,7 +220,7 @@ demo:
   mongodb:
     image: "mongo:4.2"
     storageSize: 2Gi
-    storageClass: cinder-high-speed
+    storageClass: csi-cinder-high-speed
     resources:
       limits:
         cpu: "1"
@@ -232,7 +232,7 @@ demo:
   postgresql:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
     storageSize: 1Gi
-    storageClass: cinder-high-speed
+    storageClass: csi-cinder-high-speed
     resources:
       limits:
         cpu: "1"
