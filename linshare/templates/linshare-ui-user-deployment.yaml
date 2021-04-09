@@ -44,6 +44,8 @@ spec:
               value: '8080'
             - name: TOMCAT_URL
               value: linshare-backend
+            - name: LINSHARE_THEME
+              value: {{ .Values.linshare.uiUser.theme }}
           ports:
             - containerPort: 80
           volumeMounts:

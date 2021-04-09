@@ -97,6 +97,7 @@ linshare:
       requests:
         cpu: "500m"
         memory: "500Mi"
+    theme: default
     annotations:
       keel.sh/policy: patch
     # keel.sh/policy: force
