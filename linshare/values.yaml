@@ -63,6 +63,9 @@ linshare:
       keel.sh/policy: patch
     # keel.sh/policy: force
     # keel.sh/match-tag: "true"
+    initialDelaySeconds:
+      readiness: 60
+      liveness: 91
 
   # Configuration for Linshare's administration
   uiAdmin:

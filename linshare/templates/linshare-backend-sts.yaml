@@ -37,13 +37,13 @@ spec:
             httpGet:
               path: /linshare/
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.linshare.backend.initialDelaySeconds.readiness }}
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /linshare/
               port: 8080
-            initialDelaySeconds: 91
+            initialDelaySeconds: {{ .Values.linshare.backend.initialDelaySeconds.liveness }}
             periodSeconds: 30
           {{- if eq .Values.linshare.backend.storage.mode "openstack-swift" }}
           envFrom:
