@@ -250,6 +250,20 @@ demo:
   # LDAP settings for demos
   ldap:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
+    volumeName: null
+    # ldif expected:
+    # dn: ou=People,dc=linshare,dc=org
+    # changetype: add
+    # objectClass: top
+    # objectClass: organizationalUnit
+    # ou: People
+    # description: People subtree
+    #
+    # dn: uid=account,ou=People,dc=linshare,dc=org
+    # changetype: add
+    # objectClass: top
+    # objectClass: person
+    # objectClass: inetOrgPerson
     resources:
       limits:
         cpu: "500m"

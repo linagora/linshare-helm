@@ -18,11 +18,24 @@ spec:
         app: linshare-ldap
         {{- include "linshare.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+      {{- if .Values.demo.ldap.volumeName }}
+        - name: ldap-data
+          configMap:
+            name: {{ .Values.demo.ldap.volumeName }}
+      {{- end }}
       containers:
         - name: ldap
           image: {{ .Values.demo.ldap.image }}
+          args: ["--copy-service", "--loglevel", "debug"]
           ports:
             - containerPort: 389
+          volumeMounts:
+            {{- if .Values.demo.ldap.volumeName }}
+            - name: ldap-data
+              mountPath: /container/service/slapd/assets/config/bootstrap/ldif/linshare.ldif
+              subPath: data.ldif
+            {{- end }}
           resources:
             {{- toYaml .Values.demo.ldap.resources | nindent 12 }}
       {{- if .Values.dockerCredentials }}
