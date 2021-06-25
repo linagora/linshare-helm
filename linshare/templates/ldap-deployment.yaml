@@ -27,13 +27,12 @@ spec:
       containers:
         - name: ldap
           image: {{ .Values.demo.ldap.image }}
-          args: ["--copy-service", "--loglevel", "debug"]
           ports:
-            - containerPort: 389
+            - containerPort: 1389
           volumeMounts:
             {{- if .Values.demo.ldap.volumeName }}
             - name: ldap-data
-              mountPath: /container/service/slapd/assets/config/bootstrap/ldif/linshare.ldif
+              mountPath: /ldifs/linshare.ldif
               subPath: data.ldif
             {{- end }}
           resources:

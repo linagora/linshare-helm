@@ -252,7 +252,7 @@ demo:
 
   # LDAP settings for demos
   ldap:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:1.0.1"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:2.0.0"
     volumeName: null
     # ldif expected:
     # dn: ou=People,dc=linshare,dc=org

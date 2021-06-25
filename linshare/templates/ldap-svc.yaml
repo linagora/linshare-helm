@@ -12,7 +12,7 @@ spec:
     - name: '389'
       protocol: TCP
       port: 389
-      targetPort: 389
+      targetPort: 1389
   selector:
     app: linshare-ldap
     {{- include "linshare.selectorLabels" . | nindent 4 }}

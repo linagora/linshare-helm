@@ -1,4 +1,4 @@
-base = ou=People,dc=linshare,dc=org
+base = dc=linshare,dc=org
 default_pass_scheme = SSHA
 dn = cn=linshare,dc=linshare,dc=org
 dnpass = linshare

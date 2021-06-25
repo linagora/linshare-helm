@@ -78,7 +78,7 @@ spec:
             - name: LDAP_SERVER_HOST
               value: "ldap"
             - name: LDAP_SEARCH_BASE
-              value: "ou=People,dc=linshare,dc=org"
+              value: "dc=linshare,dc=org"
             - name: LDAP_BIND_DN
               value: "cn=linshare,dc=linshare,dc=org"
             - name: LDAP_BIND_PW
