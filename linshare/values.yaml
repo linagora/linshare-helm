@@ -1,266 +1,243 @@
 # LinShare parameters
 dockerCredentials: true
 linshare:
-
-  # General settings for Linshare's back-end
-  backend:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:2.3.6"
-
-    # Memory management
-    javaXmx: 2048m
-    resources:
-      limits:
-        cpu: "4"
-        memory: "4Gi"
-      requests:
-        cpu: "2"
-        memory: "2Gi"
-
-    # Miscellaneous
-    profiles: default,jcloud,batches
-    ssoIpFilter: false
-    extraProperties: []
-    ldapHost: linshare-ldap
-
-    # Storage
-    storage:
-      # Store on a disk (filesystem) or in a bucket (openstack-swift)
-      mode: openstack-swift
-      # The directory where to store files, IF stored on a file system
-      directory: /var/lib/linshare/filesystemstorage
-      # Options for the bucket storage (Swift) are defined as a secret
-      swift:
-        bucketName: linshare
-        authUrl: https://auth.cloud.ovh.net/v3/
-        projectId: <tenant-id>
-        projectName: <tenant-name>
-        # ex: projectName: "0000000000000000"
-        userDomainName: Default
-        username: null
-        password: null
-        regionName: GRA
-        interface: public
-        identityApiVersion: "3"
-
-    secret:
-      jwtKeyName: linshare-jwt-keys
-    # Local storage (seen as a volume in the POD, to store temporary files)
-    localCache:
-      storageSize: 20Gi
-      storageClass: csi-cinder-high-speed
-
-    # SMTP
-    smtp:
-      host: linshare-demo-mail
-      port: "25"
-      enableAuth: false
-      enableSsl: false
-      enableTls: false
-      secret:
-        username: change-me
-        password: change-me
-    annotations:
-      keel.sh/policy: patch
-    # keel.sh/policy: force
-    # keel.sh/match-tag: "true"
-    initialDelaySeconds:
-      readiness: 60
-      liveness: 91
-
-  # Configuration for Linshare's administration
-  uiAdmin:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:2.3.6"
-    url: https://admin.linshare.local
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "500Mi"
-      requests:
-        cpu: "500m"
-        memory: "500Mi"
-    annotations:
-      keel.sh/policy: patch
-    # keel.sh/policy: force
-    # keel.sh/match-tag: "true"
-
-  # Configuration for LinShare's UI
-  uiUser:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:2.3.6"
-    url: https://user.linshare.local
-    externalUrl: null
-    # Config map with the JS configuration
-    jsConfigMapName: null
-    # Config map with additional resources (e.g. logos)
-    resourcesConfigMapName: null
-    replicaCount: 1
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "500Mi"
-      requests:
-        cpu: "500m"
-        memory: "500Mi"
-    theme: default
-    annotations:
-      keel.sh/policy: patch
-    # keel.sh/policy: force
-    # keel.sh/match-tag: "true"
-
-  # LinShare's initialization
-  init:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.6"
-    noReply: no-reply@linshare.local
-    extraJwtKeyName: extraJwtKeyName
-    ldapbaseDn: "ou=People,dc=linshare,dc=org"
-    ldap-username: "cn=linshare,dc=linshare,dc=org"
-    ldap-password: linshare
-    domainPattern:
-      name: pattern-demo
-      model: a4620dfc-dc46-11e8-a098-2355f9d6585a
-      # name: OpenLDAP-Pattern
-      # model: 868400c0-c12e-456a-8c3c-19e985290586
-    secret:
-      # LinShare's root username is "root@localhost.localdomain".
-      # The LinShare's root password should contain:
-      # - At least one lower-case letter.
-      # - At least one upper-case letter.
-      # - At least one digit.
-      # - At least one special character.
-      linshareRootPassword: admin2Linshare!
-      ldapUsername: cn=linshare,dc=linshare,dc=org
-      ldapPassword: linshare
-
-  initDb:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6"
-
-  # Parameters related to the thumbnail server
-  thumbnail:
-    enabled: true
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.1.1"
-    replicaCount: 1
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "500Mi"
-      requests:
-        cpu: "500m"
-        memory: "500Mi"
-
+    # General settings for Linshare's back-end
+    backend:
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-backend:2.3.6
+        # Memory management
+        javaXmx: 2048m
+        resources:
+            limits:
+                cpu: "4"
+                memory: 4Gi
+            requests:
+                cpu: "2"
+                memory: 2Gi
+        # Miscellaneous
+        profiles: default,jcloud,batches
+        ssoIpFilter: false
+        extraProperties: []
+        ldapHost: linshare-ldap
+        # Storage
+        storage:
+            # Store on a disk (filesystem) or in a bucket (openstack-swift)
+            mode: openstack-swift
+            # The directory where to store files, IF stored on a file system
+            directory: /var/lib/linshare/filesystemstorage
+            # Options for the bucket storage (Swift) are defined as a secret
+            swift:
+                bucketName: linshare
+                authUrl: https://auth.cloud.ovh.net/v3/
+                projectId: <tenant-id>
+                projectName: <tenant-name>
+                # ex: projectName: "0000000000000000"
+                userDomainName: Default
+                username: null
+                password: null
+                regionName: GRA
+                interface: public
+                identityApiVersion: "3"
+        secret:
+            jwtKeyName: linshare-jwt-keys
+        # Local storage (seen as a volume in the POD, to store temporary files)
+        localCache:
+            storageSize: 20Gi
+            storageClass: csi-cinder-high-speed
+        # SMTP
+        smtp:
+            host: linshare-demo-mail
+            port: "25"
+            enableAuth: false
+            enableSsl: false
+            enableTls: false
+            secret:
+                username: change-me
+                password: change-me
+        annotations:
+            keel.sh/policy: patch
+        # keel.sh/policy: force
+        # keel.sh/match-tag: "true"
+        initialDelaySeconds:
+            readiness: 60
+            liveness: 91
+    # Configuration for Linshare's administration
+    uiAdmin:
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:2.3.6
+        url: https://admin.linshare.local
+        resources:
+            limits:
+                cpu: 500m
+                memory: 500Mi
+            requests:
+                cpu: 500m
+                memory: 500Mi
+        annotations:
+            keel.sh/policy: patch
+    # Configuration for LinShare's UI
+    uiUser:
+        # keel.sh/policy: force
+        # keel.sh/match-tag: "true"
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:2.3.6
+        url: https://user.linshare.local
+        externalUrl: null
+        # Config map with the JS configuration
+        jsConfigMapName: null
+        # Config map with additional resources (e.g. logos)
+        resourcesConfigMapName: null
+        replicaCount: 1
+        resources:
+            limits:
+                cpu: 500m
+                memory: 500Mi
+            requests:
+                cpu: 500m
+                memory: 500Mi
+        theme: default
+        annotations:
+            keel.sh/policy: patch
+    # LinShare's initialization
+    init:
+        # keel.sh/policy: force
+        # keel.sh/match-tag: "true"
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.6
+        noReply: no-reply@linshare.local
+        extraJwtKeyName: extraJwtKeyName
+        ldapbaseDn: ou=People,dc=linshare,dc=org
+        ldap-username: cn=linshare,dc=linshare,dc=org
+        ldap-password: linshare
+        domainPattern:
+            name: pattern-demo
+            model: a4620dfc-dc46-11e8-a098-2355f9d6585a
+            # name: OpenLDAP-Pattern
+            # model: 868400c0-c12e-456a-8c3c-19e985290586
+        secret:
+            # LinShare's root username is "root@localhost.localdomain".
+            # The LinShare's root password should contain:
+            # - At least one lower-case letter.
+            # - At least one upper-case letter.
+            # - At least one digit.
+            # - At least one special character.
+            linshareRootPassword: admin2Linshare!
+            ldapUsername: cn=linshare,dc=linshare,dc=org
+            ldapPassword: linshare
+    initDb:
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6
+    # Parameters related to the thumbnail server
+    thumbnail:
+        enabled: true
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-thumbnail-server:2.1.1
+        replicaCount: 1
+        resources:
+            limits:
+                cpu: 500m
+                memory: 500Mi
+            requests:
+                cpu: 500m
+                memory: 500Mi
 # Global ingresses
 ingress:
-  enabled: false
-  hosts:
-    - host: admin.linshare.local
-      path: "/"
-      suffix: ui-admin
-    - host: user.linshare.local
-      paths: "/"
-      suffix: ui-user
-
+    enabled: false
+    hosts:
+        - host: admin.linshare.local
+          path: /
+          suffix: ui-admin
+        - host: user.linshare.local
+          paths: /
+          suffix: ui-user
 # Using LE
 ingressRoutes:
-  enabled: false
-  baseDomain: linshare.local
-  hosts:
-    admin: admin.linshare.local
-    user: user.linshare.local
-    webmail: webmail.linshare.local
-  tls:
-    certResolver: resolvername
-    domains:
-    - main: linshare.local
-      sans:
-      - '*.linshare.local'
-
+    enabled: false
+    baseDomain: linshare.local
+    hosts:
+        admin: admin.linshare.local
+        user: user.linshare.local
+        webmail: webmail.linshare.local
+    tls:
+        certResolver: resolvername
+        domains:
+            - main: linshare.local
+              sans:
+                - '*.linshare.local'
 # Use Traefik 2 middlewares
 middlewares:
-  enabled: false
-
+    enabled: false
 # Database settings
 mongodb:
-  ips: []
-# - "1.2.3.4"
-# - "4.5.6.7"
-  secret:
-    username: linshare
-    password: linshare
-    dbName: linshare
-    dbNameForSmallFiles: linshare-files
-  
+    ips: []
+    # - "1.2.3.4"
+    # - "4.5.6.7"
+    secret:
+        username: linshare
+        password: linshare
+        dbName: linshare
+        dbNameForSmallFiles: linshare-files
 postgresql:
-  port: "5432"
-  ips: []
-# - "1.2.3.4"
-# - "4.5.6.7"
-  secret:
-    username: linshare
-    password: linshare
-    dbName: linshare
-
-
+    port: "5432"
+    ips: []
+    # - "1.2.3.4"
+    # - "4.5.6.7"
+    secret:
+        username: linshare
+        password: linshare
+        dbName: linshare
 # Additional parameters for demo purpose
 demo:
-  ldapAsPod: true
-  mailServerAsPod: true
-  mongodbAsPod: true
-  postgresqlAsPod: true
-
-  # DB settings
-  mongodb:
-    image: "mongo:4.2"
-    storageSize: 2Gi
-    storageClass: csi-cinder-high-speed
-    resources:
-      limits:
-        cpu: "1"
-        memory: "2G"
-      requests:
-        cpu: "500m"
-        memory: "1G"
-
-  postgresql:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6"
-    storageSize: 1Gi
-    storageClass: csi-cinder-high-speed
-    resources:
-      limits:
-        cpu: "1"
-        memory: "2G"
-      requests:
-        cpu: "500m"
-        memory: "1G"
-
-  # LDAP settings for demos
-  ldap:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:2.0.2"
-    volumeName: null
-    # ldif expected:
-    # dn: ou=People,dc=linshare,dc=org
-    # changetype: add
-    # objectClass: top
-    # objectClass: organizationalUnit
-    # ou: People
-    # description: People subtree
-    #
-    # dn: uid=account,ou=People,dc=linshare,dc=org
-    # changetype: add
-    # objectClass: top
-    # objectClass: person
-    # objectClass: inetOrgPerson
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "500Mi"
-      requests:
-        cpu: "500m"
-        memory: "500Mi"
-
-  # Mail settings for demos
-  mail:
-    image: "tvial/docker-mailserver:2.1"
-  webmail:
-    image: "robbertkl/roundcube"
-
+    ldapAsPod: true
+    mailServerAsPod: true
+    mongodbAsPod: true
+    postgresqlAsPod: true
+    # DB settings
+    mongodb:
+        image: mongo:4.2
+        storageSize: 2Gi
+        storageClass: csi-cinder-high-speed
+        resources:
+            limits:
+                cpu: "1"
+                memory: 2G
+            requests:
+                cpu: 500m
+                memory: 1G
+    postgresql:
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6
+        storageSize: 1Gi
+        storageClass: csi-cinder-high-speed
+        resources:
+            limits:
+                cpu: "1"
+                memory: 2G
+            requests:
+                cpu: 500m
+                memory: 1G
+    # LDAP settings for demos
+    ldap:
+        image: docker-registry.linagora.com:5000/linshare-releases/linshare-ldap-for-tests:2.0.2
+        volumeName: null
+        # ldif expected:
+        # dn: ou=People,dc=linshare,dc=org
+        # changetype: add
+        # objectClass: top
+        # objectClass: organizationalUnit
+        # ou: People
+        # description: People subtree
+        #
+        # dn: uid=account,ou=People,dc=linshare,dc=org
+        # changetype: add
+        # objectClass: top
+        # objectClass: person
+        # objectClass: inetOrgPerson
+        resources:
+            limits:
+                cpu: 500m
+                memory: 500Mi
+            requests:
+                cpu: 500m
+                memory: 500Mi
+    # Mail settings for demos
+    mail:
+        image: tvial/docker-mailserver:2.1
+    webmail:
+        image: robbertkl/roundcube
 
 # If you want to store secrets into a different file,
 # you can create a file named secrets.yaml containing
