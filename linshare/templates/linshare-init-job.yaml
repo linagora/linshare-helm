@@ -44,10 +44,6 @@ spec:
             - name: LS_EXTERNAL_URL
               value: "{{ .Values.linshare.uiUser.externalUrl }}"
             {{- end }}
-            {{- if .Values.linshare.uiUploadRequest.url }}
-            - name: LS_UPLOAD_REQUEST_URL
-              value: "{{ .Values.linshare.uiUploadRequest.url }}"
-            {{- end }}
             - name: LS_NO_REPLY_ADDRESS
               value: "{{ .Values.linshare.init.noReply }}"
             - name: LS_LDAP_NAME

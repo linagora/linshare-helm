@@ -4,7 +4,7 @@ linshare:
 
   # General settings for Linshare's back-end
   backend:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:2.3.6"
 
     # Memory management
     javaXmx: 2048m
@@ -69,7 +69,7 @@ linshare:
 
   # Configuration for Linshare's administration
   uiAdmin:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:2.3.6"
     url: https://admin.linshare.local
     resources:
       limits:
@@ -85,7 +85,7 @@ linshare:
 
   # Configuration for LinShare's UI
   uiUser:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:2.3.6"
     url: https://user.linshare.local
     externalUrl: null
     # Config map with the JS configuration
@@ -106,25 +106,9 @@ linshare:
     # keel.sh/policy: force
     # keel.sh/match-tag: "true"
 
-  uiUploadRequest:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.0.0"
-    url: https://upload-request.linshare.local
-    replicaCount: 1
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "500Mi"
-      requests:
-        cpu: "500m"
-        memory: "500Mi"
-    annotations:
-      keel.sh/policy: patch
-    # keel.sh/policy: force
-    # keel.sh/match-tag: "true"
-
   # LinShare's initialization
   init:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:2.3.6"
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
     ldapbaseDn: "ou=People,dc=linshare,dc=org"
@@ -147,7 +131,7 @@ linshare:
       ldapPassword: linshare
 
   initDb:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6"
 
   # Parameters related to the thumbnail server
   thumbnail:
@@ -172,9 +156,6 @@ ingress:
     - host: user.linshare.local
       paths: "/"
       suffix: ui-user
-    - host: upload-request.linshare.local
-      paths: "/"
-      suffix: ui-upload-request
 
 # Using LE
 ingressRoutes:
@@ -184,7 +165,6 @@ ingressRoutes:
     admin: admin.linshare.local
     user: user.linshare.local
     webmail: webmail.linshare.local
-    uploadRequest: upload-request.linshare.local
   tls:
     certResolver: resolvername
     domains:
@@ -239,7 +219,7 @@ demo:
         memory: "1G"
 
   postgresql:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.0.0"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:2.3.6"
     storageSize: 1Gi
     storageClass: csi-cinder-high-speed
     resources:
