@@ -188,7 +188,7 @@ demo:
     postgresqlAsPod: true
     # DB settings
     mongodb:
-        image: mongo:4.2
+        image: mongo:3.6
         storageSize: 2Gi
         storageClass: csi-cinder-high-speed
         resources:
