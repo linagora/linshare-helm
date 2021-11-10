@@ -223,6 +223,7 @@ postgresql:
 demo:
   ldapAsPod: true
   mailServerAsPod: true
+  publishWithLBsmtpServer: false
   mongodbAsPod: true
   postgresqlAsPod: true
 

@@ -1,0 +1,24 @@
+# vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- if .Values.demo.publishWithLBsmtpServer }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: linshare-demo-mail-loadbalancer
+  annotations:
+    metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: linshare-demo-mail-loadbalancer
+    {{- include "linshare.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "smtp"
+      protocol: TCP
+      port: 25
+      targetPort: 25
+  selector:
+    app: linshare-demo-mail
+    {{- include "linshare.selectorLabels" . | nindent 4 }}
+{{- end }}
