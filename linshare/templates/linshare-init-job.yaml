@@ -51,7 +51,7 @@ spec:
             - name: LS_NO_REPLY_ADDRESS
               value: "{{ .Values.linshare.init.noReply }}"
             - name: LS_LDAP_NAME
-              value: "ldap"
+              value: "{{ .Values.linshare.init.ldapName }}"
             - name: LS_LDAP_URL
               value: "ldap://ldap:389"
             - name: LS_LDAP_BASE_DN
