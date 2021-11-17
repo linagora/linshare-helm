@@ -224,6 +224,7 @@ demo:
   ldapAsPod: true
   mailServerAsPod: true
   publishWithLBsmtpServer: false
+  publishWithLBimapServer: false
   mongodbAsPod: true
   postgresqlAsPod: true
 

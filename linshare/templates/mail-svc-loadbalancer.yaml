@@ -18,6 +18,12 @@ spec:
       protocol: TCP
       port: 25
       targetPort: 25
+    {{- if .Values.demo.publishWithLBimapServer }}
+    - name: "imap"
+      protocol: TCP
+      port: 143
+      targetPort: 143
+    {{- end }}
   selector:
     app: linshare-demo-mail
     {{- include "linshare.selectorLabels" . | nindent 4 }}
