@@ -284,7 +284,6 @@ demo:
   webmail:
     image: "robbertkl/roundcube"
 
-
 # If you want to store secrets into a different file,
 # you can create a file named secrets.yaml containing
 # the following and sensitive keys:
