@@ -16,7 +16,7 @@ spec:
   ports:
     - name: "smtp"
       protocol: TCP
-      port: 25
+      port: 2525
       targetPort: 25
     {{- if .Values.demo.publishWithLBimapServer }}
     - name: "imap"
