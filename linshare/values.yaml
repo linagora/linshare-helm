@@ -167,16 +167,44 @@ linshare:
 # Global ingresses
 ingress:
   enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
   hosts:
     - host: admin.linshare.local
-      path: "/"
-      suffix: ui-admin
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linshare-ui-admin
+            port:
+              number: 80
     - host: user.linshare.local
-      paths: "/"
-      suffix: ui-user
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linshare-ui-user
+            port:
+              number: 80
     - host: upload-request.linshare.local
-      paths: "/"
-      suffix: ui-upload-request
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linshare-ui-upload-request
+            port:
+              number: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - admin.linshare.local
+  #      - user.linshare.local
+  #      - upload-request.linshare.local
 
 # Using LE
 ingressRoutes:
