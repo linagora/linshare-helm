@@ -21,6 +21,7 @@ linshare:
     ssoIpFilter: false
     extraProperties: []
     ldapHost: linshare-ldap
+    debug: 0
 
     # Storage
     storage:

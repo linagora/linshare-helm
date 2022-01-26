@@ -132,6 +132,8 @@ spec:
                   key: mongodb-small-files-database
             - name: START_DEBUG
               value: "0"
+            - name: LS_DEBUG
+              value: "{{ .Values.linshare.backend.debug }}"
             - name: STORAGE_MODE
               value: {{ .Values.linshare.backend.storage.mode }}
             - name: STORAGE_FILESYSTEM_DIR
