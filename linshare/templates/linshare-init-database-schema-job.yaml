@@ -4,7 +4,11 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: linshare-init-database
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded, hook-failed
 spec:
+  activeDeadlineSeconds: 1800
   template:
     metadata:
       labels:
