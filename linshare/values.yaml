@@ -238,6 +238,7 @@ mongodb:
     dbNameForSmallFiles: linshare-files
   
 postgresql:
+  externalName: ""
   port: "5432"
   ips: []
 # - "1.2.3.4"

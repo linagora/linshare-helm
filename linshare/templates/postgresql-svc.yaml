@@ -7,10 +7,16 @@ metadata:
     app: postgresql
     {{- include "linshare.labels" . | nindent 4 }}
 spec:
+{{- if .Values.postgresql.externalName }}
+  type: ExternalName
+  externalName: {{ .Values.postgresql.externalName }}
+{{- end -}}
+{{- if not .Values.postgresql.externalName }}
   ports:
     - protocol: TCP
       port: {{ .Values.postgresql.port }}
-{{- if not .Values.postgresql.ips }}
+{{- end -}}
+{{- if and (not .Values.postgresql.ips) (not .Values.postgresql.externalName) }}
   selector:
     app: postgresql
     {{- include "linshare.selectorLabels" . | nindent 4 }}
