@@ -24,6 +24,7 @@ spec:
       containers:
         - name: ui-admin
           image: {{ .Values.linshare.uiAdmin.image }}
+          imagePullPolicy: {{ .Values.linshare.uiAdmin.imagePullPolicy }}
           env:
           {{- if .Values.linshare.uiAdmin.url }}
             - name: EXTERNAL_URL

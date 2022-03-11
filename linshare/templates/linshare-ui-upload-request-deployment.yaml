@@ -24,6 +24,7 @@ spec:
       containers:
         - name: ui-request
           image: {{ .Values.linshare.uiUploadRequest.image }}
+          imagePullPolicy: {{ .Values.linshare.uiUploadRequest.imagePullPolicy }}
           env:
           {{- if .Values.linshare.uiUploadRequest.url }}
             - name: EXTERNAL_URL

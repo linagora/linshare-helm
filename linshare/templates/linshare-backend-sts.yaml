@@ -33,6 +33,7 @@ spec:
       containers:
         - name: backend
           image: {{ .Values.linshare.backend.image }}
+          imagePullPolicy: {{ .Values.linshare.backend.imagePullPolicy }}
           readinessProbe:
             httpGet:
               path: /linshare/

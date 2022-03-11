@@ -28,6 +28,7 @@ spec:
       containers:
         - name: webmail
           image: {{ .Values.demo.webmail.image }}
+          imagePullPolicy: {{ .Values.demo.webmail.imagePullPolicy }}
           volumeMounts:
             - name: config-web
               mountPath: /var/www/config/config.inc.php

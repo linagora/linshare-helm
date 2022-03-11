@@ -20,6 +20,7 @@ spec:
       containers:
         - name: thumbnail-server
           image: {{ .Values.linshare.thumbnail.image }}
+          imagePullPolicy: {{ .Values.linshare.thumbnail.imagePullPolicy }}
           resources:
             {{- toYaml .Values.linshare.thumbnail.resources | nindent 12 }}
           ports:

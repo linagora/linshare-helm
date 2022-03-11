@@ -35,6 +35,7 @@ spec:
       containers:
         - name: ui-user
           image: {{ .Values.linshare.uiUser.image }}
+          imagePullPolicy: {{ .Values.linshare.uiUser.imagePullPolicy }}
           env:
           {{- if .Values.linshare.uiUser.externalUrl }}
             - name: EXTERNAL_URL

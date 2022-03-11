@@ -23,6 +23,7 @@ spec:
       containers:
         - name: mongo
           image: {{ .Values.demo.mongodb.image }}
+          imagePullPolicy: {{ .Values.demo.mongodb.imagePullPolicy }}
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:

@@ -22,6 +22,7 @@ spec:
       containers:
         - name: linshare-init-database
           image: {{ .Values.linshare.initDb.image }}
+          imagePullPolicy: {{ .Values.linshare.initDb.imagePullPolicy }}
           terminationMessagePolicy: FallbackToLogsOnError
           env:
           - name: POSTGRES_HOST

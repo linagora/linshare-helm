@@ -27,6 +27,7 @@ spec:
       containers:
         - name: ldap
           image: {{ .Values.demo.ldap.image }}
+          imagePullPolicy: {{ .Values.demo.ldap.imagePullPolicy }}
           ports:
             - containerPort: 1389
           volumeMounts:
