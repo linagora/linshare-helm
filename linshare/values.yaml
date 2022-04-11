@@ -4,7 +4,7 @@ linshare:
 
   # General settings for Linshare's back-end
   backend:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:5.0.3"
     imagePullPolicy: "IfNotPresent"
 
     # Memory management
@@ -71,7 +71,7 @@ linshare:
 
   # Configuration for Linshare's administration
   uiAdmin:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:5.0.3"
     imagePullPolicy: "IfNotPresent"
     url: https://admin.linshare.local
     resources:
@@ -88,7 +88,7 @@ linshare:
 
   # Configuration for LinShare's UI
   uiUser:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:5.0.3"
     imagePullPolicy: "IfNotPresent"
     url: https://user.linshare.local
     externalUrl: null
@@ -111,7 +111,7 @@ linshare:
     # keel.sh/match-tag: "true"
 
   uiUploadRequest:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:5.0.3"
     imagePullPolicy: "IfNotPresent"
     url: https://upload-request.linshare.local
     replicaCount: 1
@@ -129,7 +129,7 @@ linshare:
 
   # LinShare's initialization
   init:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:5.0.3"
     imagePullPolicy: "IfNotPresent"
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
@@ -154,7 +154,7 @@ linshare:
       ldapPassword: linshare
 
   initDb:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.0.3"
     imagePullPolicy: "IfNotPresent"
 
   # Parameters related to the thumbnail server
@@ -280,7 +280,7 @@ demo:
         memory: "1G"
 
   postgresql:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:4.2.2"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.0.3"
     imagePullPolicy: "IfNotPresent"
     storageSize: 1Gi
     storageClass: csi-cinder-high-speed
