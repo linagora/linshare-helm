@@ -74,6 +74,8 @@ linshare:
     image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:5.0.3"
     imagePullPolicy: "IfNotPresent"
     url: https://admin.linshare.local
+    # Config map with the JS configuration
+    jsConfigMapName: null
     resources:
       limits:
         cpu: "500m"

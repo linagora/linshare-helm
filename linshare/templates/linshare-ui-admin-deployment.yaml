@@ -21,6 +21,12 @@ spec:
         app: linshare-ui-admin
         {{- include "linshare.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+      {{- if .Values.linshare.uiAdmin.jsConfigMapName }}
+        - name: linshare-ui-admin-js-config
+          configMap:
+            name: {{ .Values.linshare.uiAdmin.jsConfigMapName }}
+      {{- end }}
       containers:
         - name: ui-admin
           image: {{ .Values.linshare.uiAdmin.image }}
@@ -36,6 +42,12 @@ spec:
               value: linshare-backend
           ports:
             - containerPort: 80
+          volumeMounts:
+            {{- if .Values.linshare.uiAdmin.jsConfigMapName }}
+            - name: linshare-ui-admin-js-config
+              mountPath: /usr/local/apache2/htdocs/linshare-ui-admin/new/config/config.js
+              subPath: linshare.ui-admin.config.js
+            {{- end }}
           resources:
             {{- toYaml .Values.linshare.uiAdmin.resources | nindent 12 }}
           readinessProbe:
