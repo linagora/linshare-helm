@@ -1,4 +1,5 @@
 # vim: syntax=yaml textwidth=80 expandtab tabstop=2 softtabstop=2 shiftwidth=2 autoindent
+{{- $mongodbUrl := include "mongodb.url.list" . }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -63,9 +64,9 @@ spec:
             - name: CLAMAV_PORT
               value: "3310"
             - name: MONGODB_DATA_REPLICA_SET
-              value: "mongodb:27017"
+              value: "{{ $mongodbUrl | trimSuffix "," }}"
             - name: MONGODB_SMALLFILES_REPLICA_SET
-              value: "mongodb:27017"
+              value: "{{ $mongodbUrl | trimSuffix "," }}"
             - name: MONGODB_PORT
               value: ""
             - name: POSTGRES_HOST

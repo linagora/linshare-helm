@@ -237,6 +237,9 @@ middlewares:
 
 # Database settings
 mongodb:
+  # Use deploy: "as-ref" to fix MongoDB service name resolution issue in some k8s clusters.
+  # Convert default MONGODB_DATA_REPLICA_SET "mongodb:27017" into IP list. 
+  # deploy: "as-ref"
   ips: []
 # - "1.2.3.4"
 # - "4.5.6.7"

@@ -78,3 +78,17 @@ Create a random secret
 {{- define "linshare.random.secret" -}}
 {{- printf "%s@" (randAlphaNum 16) | b64enc -}}
 {{- end -}}
+
+{{/*
+Contruct a temporary URL for MongoDB. This URL ends with a comma.
+*/}}
+{{- define "mongodb.url.list" -}}
+  {{- $port := "27017" }}
+  {{- if eq .Values.mongodb.deploy "as-ref" }}
+    {{- range $ip := .Values.mongodb.ips }}
+      {{- printf "%s:%s," $ip $port }}
+    {{- end -}}
+  {{- else }}
+    {{- printf "mongodb:27017"}}
+  {{- end -}}
+{{- end -}}
