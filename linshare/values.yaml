@@ -4,7 +4,7 @@ linshare:
 
   # General settings for Linshare's back-end
   backend:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-backend:5.1.0"
     imagePullPolicy: "IfNotPresent"
 
     # Memory management
@@ -23,6 +23,9 @@ linshare:
     extraProperties: []
     ldapHost: linshare-ldap
     debug: 0
+    logType: CONSOLE_JSON
+    # Defines the Log4J appender used for logging (default=CONSOLE, available values: CONSOLE, CONSOLE_JSON, LINSHARE)
+    # You can also use specify multiple appenders in the env variable by joining them with a comma (ex. CONSOLE, LINSHARE)
 
     # Storage
     storage:
@@ -71,7 +74,7 @@ linshare:
 
   # Configuration for Linshare's administration
   uiAdmin:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-admin:5.1.0"
     imagePullPolicy: "IfNotPresent"
     url: https://admin.linshare.local
     # Config map with the JS configuration
@@ -90,7 +93,7 @@ linshare:
 
   # Configuration for LinShare's UI
   uiUser:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-user:5.1.0"
     imagePullPolicy: "IfNotPresent"
     url: https://user.linshare.local
     externalUrl: null
@@ -113,7 +116,7 @@ linshare:
     # keel.sh/match-tag: "true"
 
   uiUploadRequest:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-ui-upload-request:5.1.0"
     imagePullPolicy: "IfNotPresent"
     url: https://upload-request.linshare.local
     replicaCount: 1
@@ -131,7 +134,7 @@ linshare:
 
   # LinShare's initialization
   init:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-init:5.1.0"
     imagePullPolicy: "IfNotPresent"
     noReply: no-reply@linshare.local
     extraJwtKeyName: extraJwtKeyName
@@ -156,7 +159,7 @@ linshare:
       ldapPassword: linshare
 
   initDb:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.1.0"
     imagePullPolicy: "IfNotPresent"
 
   # Parameters related to the thumbnail server
@@ -237,9 +240,6 @@ middlewares:
 
 # Database settings
 mongodb:
-  # Use deploy: "as-ref" to fix MongoDB service name resolution issue in some k8s clusters.
-  # Convert default MONGODB_DATA_REPLICA_SET "mongodb:27017" into IP list. 
-  # deploy: "as-ref"
   ips: []
 # - "1.2.3.4"
 # - "4.5.6.7"
@@ -285,7 +285,7 @@ demo:
         memory: "1G"
 
   postgresql:
-    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.0.3"
+    image: "docker-registry.linagora.com:5000/linshare-releases/linshare-database:5.1.0"
     imagePullPolicy: "IfNotPresent"
     storageSize: 1Gi
     storageClass: csi-cinder-high-speed
