@@ -1,7 +1,7 @@
 apiVersion: v2
 name: linshare
-version: 0.2.0
-appVersion: 4.0
+version: 0.2.1
+appVersion: 5.1.0
 home: https://github.com/linagora/linshare
 description: A Helm chart for LinShare
 icon: https://www.linshare.org/favicon.ico
@@ -15,7 +15,10 @@ keywords:
   - linshare
 sources:
   - https://ci.linagora.com/linagora/lgs/linshare/saas/linshare-helm
+  - https://gitlab.com/linagora_private/saas/tools/helm-charts/helm-linshare
 maintainers:
   - name: Frederic MARTIN
     email: fmartin@linagora.com
+  - name: Duc Nguyen
+    email: midnguyen@linagora.com
 kubeVersion: ">=1.19.0-0"
