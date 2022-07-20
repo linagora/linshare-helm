@@ -23,7 +23,7 @@ linshare:
     extraProperties: []
     ldapHost: linshare-ldap
     debug: 0
-    logType: CONSOLE_JSON
+    logType: CONSOLE
     # Defines the Log4J appender used for logging (default=CONSOLE, available values: CONSOLE, CONSOLE_JSON, LINSHARE)
     # You can also use specify multiple appenders in the env variable by joining them with a comma (ex. CONSOLE, LINSHARE)
 
@@ -240,9 +240,10 @@ middlewares:
 
 # Database settings
 mongodb:
+  # deploy: as-ref
   ips: []
-# - "1.2.3.4"
-# - "4.5.6.7"
+    # - "1.2.3.4"
+    # - "4.5.6.7"
   secret:
     username: linshare
     password: linshare
@@ -253,8 +254,8 @@ postgresql:
   externalName: ""
   port: "5432"
   ips: []
-# - "1.2.3.4"
-# - "4.5.6.7"
+    # - "1.2.3.4"
+    # - "4.5.6.7"
   secret:
     username: linshare
     password: linshare
